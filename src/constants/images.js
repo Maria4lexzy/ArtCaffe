@@ -19,9 +19,19 @@ import award03 from '../assets/award03.png';
 import award05 from '../assets/award05.png';
 import sign from '../assets/sign.png';
 import quote from '../assets/quote.png';
+import purpledrink from '../assets/purpledrink.jpg';
+import orangedrink from '../assets/orangedrink.jpg';
+import bluedrink from '../assets/bluedrink.jpg';
 import gericht from '../assets/gericht.png';
+import introdrink from '../assets/introdrink.png';
+import cocktailsplash from '../assets/cocktailsplash.jpg';
 
 export default {
+  introdrink,
+  bluedrink,
+  purpledrink,
+  orangedrink,
+  cocktailsplash,
   bg,
   chef,
   G,
