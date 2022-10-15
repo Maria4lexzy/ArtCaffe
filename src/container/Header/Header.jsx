@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './Header.scss';
-import { images } from '../../constants';
+import { pics } from '../../constants';
 import { SubHeading } from '../../components';
 const Header = () => (
   <div className='app__header app__wrapper section__padding' id='home'>
@@ -12,7 +12,7 @@ const Header = () => (
       <button type='button' className='custom__button'>Explore</button>
     </div>
     <div className='app__wrapper-img'>
-      <img src={images.introdrink} alt="welcome drink" />
+      <img src={pics.introdrink} alt="welcome drink" />
     </div>
 
   </div>
