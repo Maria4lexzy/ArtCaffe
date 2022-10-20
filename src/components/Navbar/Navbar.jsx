@@ -10,18 +10,12 @@ const languageMap = {
   sk: { label: "Slovenský", dir: "ltr", active: true },
 };
 const Navbar = () => {
-  const selected = localStorage.getItem("i18nextLng") || "sk";
   const { t } = useTranslation();
-  const [changeLang, setChangeLang] = useState("en");
   const handleLanguageSet = (e, languageCode) => {
     i18next.changeLanguage(languageCode);
-    setChangeLang(languageCode);
     e.preventDefault();
     //onClick={(e) => handleLanguageSet(e, "sk")}
   };
-  useEffect(() => {
-    document.body.dir = languageMap[selected].dir;
-  }, [changeLang, selected]);
 
   const [toggleMeny, setToggleMenu] = useState(false);
   return (
