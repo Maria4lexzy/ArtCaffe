@@ -10,11 +10,11 @@ const languageMap = {
   sk: { label: "Slovenský", dir: "ltr", active: true },
 };
 const Navbar = () => {
+  //const selected = localStorage.getItem("i18nextLng") || "sk";
   const { t } = useTranslation();
   const handleLanguageSet = (e, languageCode) => {
     i18next.changeLanguage(languageCode);
     e.preventDefault();
-    //onClick={(e) => handleLanguageSet(e, "sk")}
   };
 
   const [toggleMeny, setToggleMenu] = useState(false);

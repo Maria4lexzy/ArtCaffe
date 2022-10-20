@@ -1,13 +1,13 @@
 import bg from "../assets/bg.jpg";
-import chef from "../assets/chef.png";
+import bartender from "../assets/bartender.jpg";
 import G from "../assets/G.png";
-import gallery01 from "../assets/gallery01.png";
-import gallery02 from "../assets/gallery02.png";
-import gallery03 from "../assets/gallery03.png";
-import gallery04 from "../assets/gallery04.png";
+import gallery01 from "../assets/1.jpg";
+import gallery02 from "../assets/2.jpg";
+import gallery03 from "../assets/3.jpg";
+import gallery04 from "../assets/4.jpg";
 import knife from "../assets/knife.png";
 import logo from "../assets/logo_art_caffe_W.svg";
-import menu from "../assets/menu.png";
+import menu from "../assets/specials.jpg";
 import overlaybg from "../assets/overlaybg.png";
 import spoon from "../assets/spoon.svg";
 import welcome from "../assets/welcome.png";
@@ -37,7 +37,7 @@ export default {
   orangedrink,
   cocktailsplash,
   bg,
-  chef,
+  bartender,
   G,
   gallery01,
   gallery02,
