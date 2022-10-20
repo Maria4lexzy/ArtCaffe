@@ -1,8 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { AboutUs, Bartender, FindUs, Footer, Gallery, Header, Intro, Laurels, SpecialMenu } from './container';
-import { Navbar } from './components';
-import './App.scss';
+import {
+  AboutUs,
+  Bartender,
+  FindUs,
+  Footer,
+  Gallery,
+  Header,
+  SpecialMenu,
+} from "./container";
+import { Navbar } from "./components";
+import "./App.scss";
 
 const App = () => (
   <div>
@@ -11,8 +19,6 @@ const App = () => (
     <AboutUs />
     <SpecialMenu />
     <Bartender />
-    <Intro />
-    <Laurels />
     <Gallery />
     <FindUs />
     <Footer />
