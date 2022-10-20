@@ -23,9 +23,13 @@ import cocktailsplash from "../assets/cocktailsplash.png";
 import A from "../assets/A.png";
 import cocktail from "../assets/cocktail.png";
 import bean from "../assets/bean.svg";
+import sk from "../assets/locales/sk/sk.svg";
+import gb from "../assets/locales/en/gb.svg";
 export default {
   bean,
   cocktail,
+  sk,
+  gb,
   A,
   introdrink,
   bluedrink,
