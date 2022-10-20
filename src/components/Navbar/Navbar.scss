@@ -30,10 +30,11 @@
     }
   }
 
-  &-login {
+  &-language {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    padding: 4px;
     a {
       margin: 0 16px;
       text-decoration: none;
@@ -47,6 +48,15 @@
       width: 1px;
       height: 30px;
       background-color: var(--color-primary);
+    }
+    &_sk,
+    &_en {
+      font-size: 24px;
+      cursor: pointer;
+      // background-color: red;
+    }
+    &_sk {
+      margin: 0 16px 0 8px;
     }
   }
 

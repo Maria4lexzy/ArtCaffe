@@ -25,6 +25,7 @@ import cocktail from "../assets/cocktail.png";
 import bean from "../assets/bean.svg";
 import sk from "../assets/locales/sk/sk.svg";
 import gb from "../assets/locales/en/gb.svg";
+// eslint-disable-next-line
 export default {
   bean,
   cocktail,

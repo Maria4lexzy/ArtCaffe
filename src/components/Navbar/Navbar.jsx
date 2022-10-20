@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import pics from "../../constants/pics";
 import { useTranslation } from "react-i18next";
 import "./Navbar.scss";
 import i18next from "i18next";
-const languageMap = {
-  en: { label: "English", dir: "ltr", active: false },
-  sk: { label: "Slovenský", dir: "ltr", active: true },
-};
+
 const Navbar = () => {
   //const selected = localStorage.getItem("i18nextLng") || "sk";
   const { t } = useTranslation();
@@ -38,15 +35,18 @@ const Navbar = () => {
           <a href="#contact">{t("contact")}</a>
         </li>
       </ul>
-      <div className="app__navbar-login">
-        <p className="p__opensans">{t("language")}</p>
-        <button onClick={(e) => handleLanguageSet(e, "en")}>
-          <img src={pics.gb} alt="English" height="20" width="20" />
-        </button>
-        <button onClick={(e) => handleLanguageSet(e, "sk")}>
-          <img src={pics.sk} alt="Slovenský" height="20" width="20" />
-        </button>
+      <div className="app__navbar-language">
+
+        <p onClick={(e) => handleLanguageSet(e, "en")}>
+          <img src={pics.gb} className="app__navbar-language_en" alt="English" height="20" width="20" />
+        </p>
+
         /
+        <p onClick={(e) => handleLanguageSet(e, "sk")}>
+          <img src={pics.sk} className="app__navbar-language_sk" alt="Slovenský" height="20" width="20" />
+
+        </p>
+
         <div />
         <a href="/" className="p__opensans">
           {t("reserve_table")}

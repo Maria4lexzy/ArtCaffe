@@ -53,5 +53,5 @@ const cocktails = [
     tags: "Gin | Sweet Vermouth | Campari | Orange garnish",
   },
 ];
-
+// eslint-disable-next-line
 export default { wines, cocktails };

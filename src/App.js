@@ -13,10 +13,12 @@ import {
 
 import { Navbar } from "./components";
 import "./App.scss";
+import Particless from "./components/Particless/Particless";
 
 const App = () => (
   <div>
     <Navbar />
+    <Particless />
     <Header />
     <AboutUs />
     <SpecialMenu />
