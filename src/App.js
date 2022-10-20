@@ -8,7 +8,9 @@ import {
   Gallery,
   Header,
   SpecialMenu,
+
 } from "./container";
+
 import { Navbar } from "./components";
 import "./App.scss";
 

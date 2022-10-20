@@ -1,6 +1,6 @@
 .app__header {
 	background-color: var(--color-black);
-	min-height: 100vh;
+	// background-color: #070a09;
 	&-h1 {
 		font-family: var(--font-base);
 		color: var(--color-primary);
@@ -16,6 +16,10 @@
 
 	img {
 		width: 85%;
+	}
+	.cusotm__button {
+		position: relative;
+		z-index: 5;
 	}
 }
 

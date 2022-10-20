@@ -53,6 +53,7 @@
 
 .custom__button {
   background-color: var(--color-crimson);
+  transition: 0.5s ease;
   color: var(--color-black);
   font-family: var(--font-base);
   font-weight: 700;
@@ -64,6 +65,10 @@
   border: none;
   outline: none;
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-primary);
+  }
 }
 
 .p__cormorant {
@@ -97,7 +102,7 @@
 }
 
 .spoon__img {
-  width: 45px;
+  width: 120px;
 }
 
 @media screen and (min-width: 2000px) {

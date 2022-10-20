@@ -22,7 +22,9 @@ import introdrink from "../assets/introdrink.png";
 import cocktailsplash from "../assets/cocktailsplash.png";
 import A from "../assets/A.png";
 import cocktail from "../assets/cocktail.png";
+import bean from "../assets/bean.svg";
 export default {
+  bean,
   cocktail,
   A,
   introdrink,
