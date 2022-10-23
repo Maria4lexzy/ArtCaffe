@@ -1,10 +1,22 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../providers/UserProvider";
-
+import SignInPage from "./SignInPage";
+import { signOutUser } from "../../firebase";
 const Reservation = () => {
   const user = useContext(UserContext);
 
-  return user ? <>Manager page</> : <>You don't have acces to this page</>;
+  async function handleLogOut(e) {
+    e.preventDefault();
+    signOutUser();
+  }
+  return user ? (
+    <>
+      <h2>Manager page</h2>
+      <button onClick={handleLogOut}>LOGOUT</button>
+    </>
+  ) : (
+    <SignInPage />
+  );
 };
 
 export default Reservation;
