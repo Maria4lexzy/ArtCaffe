@@ -1,0 +1,109 @@
+.app__sign_in {
+	&-content {
+		padding: 24px 48px;
+		background: var(--color-black);
+		border: 1px solid var(--color-primary);
+		&-heading {
+			text-align: center;
+		}
+		&-input {
+			display: flex;
+			flex-direction: column;
+			margin-top: 3rem;
+			input {
+				width: 620px;
+				border: 1px solid var(--color-primary);
+				border-radius: 4px;
+				font-size: 16px;
+				font-family: var(--font-base);
+				color: var(--color-white);
+				// margin-right: 24px;
+				padding: 4px 16px;
+				margin: 24px 0;
+				background: var(--color-black);
+			}
+			button {
+				width: max-content;
+			}
+		}
+	}
+	&-img {
+		flex: 1;
+		margin: 24px 0;
+		text-align: center;
+
+		img {
+			width: 210px;
+			margin-bottom: 0.75rem;
+		}
+	}
+}
+
+@media screen and (min-width: 2000px) {
+	.app__sign_in {
+		&-content {
+			&-heading {
+			}
+			&-input {
+				input {
+					font-size: 24px;
+				}
+				button {
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 990px) {
+	.app__sign_in {
+		&-content {
+			width: 70%;
+			&-heading {
+			}
+			&-input {
+				flex-direction: column;
+				width: 100%;
+				input {
+					margin: 0 0 24px 0;
+					width: 100%;
+				}
+				button {
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 650px) {
+	.app__sign_in {
+		&-content {
+			width: 60%;
+			&-heading {
+			}
+			&-input {
+				input {
+				}
+				button {
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 300px) {
+	.app__newsletter {
+		&-heading {
+			h1 {
+				font-size: 32px;
+				line-height: 50px;
+			}
+		}
+		&-input {
+			input {
+			}
+			button {
+			}
+		}
+	}
+}
