@@ -1,0 +1,137 @@
+.css-yk16xz-control {
+  border: 3px solid #f15b25 !important;
+}
+
+.css-1uccc91-singleValue {
+  /* color: greenyellow !important; */
+}
+.sticky-wrapper {
+  position: relative;
+  height: 3rem; /* We need to change this value */
+}
+
+.sticky-inner {
+  position: fixed;
+  top: 90px;
+  z-index: 1;
+}
+.calendar table .event.event-short {
+  background-color: transparent;
+  color: #000;
+
+}
+.events-wrapper{
+   /* display:flex;
+  flex-wrap: wrap;
+  width: calc(100% + 3px); */
+ 
+}
+.monthEventStyles{
+  /* border-radius: 5px; */
+  color: white;
+  border-radius: 3px;
+
+}
+.monthEventStyles p{
+  margin-top: .2rem !important;
+}
+
+.week{
+
+  height: 75vh;
+}
+.calendar table tbody{
+  overflow-y: auto;
+}
+.calendar table th {
+  color: #9a9a9a;
+}
+
+.calendar td {
+  height: 95px;
+  min-width: 95px;
+}
+
+.calendar td:hover {
+  background-color: rgba(23, 162, 184, 0.1);
+  /* color: #1266F1; */
+
+}
+
+
+.calendar td.today {
+  /* background-color: rgba(23, 162, 184, 1); */
+  background-color: #f15b25;
+  color: #ffffff;
+  border-radius: 3px;
+}
+
+.calendar-tools-arrows,
+.calendar-tools-today {
+  border-width: 3px !important;
+
+}
+
+
+.calendar-tools-date {
+  font-size: 1.1rem;
+}
+
+
+.calendar table.month td {
+  padding-top: 20px;
+}
+
+.calendar table td.disabled {
+  color: #be3b3b;
+}
+
+.calendar table td {
+  border: 1 px solid #ddd;
+  position: relative;
+  vertical-align: top;
+  padding:0px !important;
+}
+
+.calendar table td .day-field {
+  position: absolute;
+  left: 5px;
+  top: 0;
+  font-size: 1.2rem;
+  font-weight: 800px;
+}
+
+.calendar table .event {
+  padding: 1px 5px;
+  background-color: royalblue;
+  color: #fff;
+  width: 100%;
+  font-size: .7rem;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+
+.faded-text{
+  color:#E8E8E8
+}
+
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .calendar-tools-date {
+    font-size: 0.1rem;
+  }
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {}
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {}

@@ -1,6 +1,13 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import {
+  getFirstDayIndex,
+  getLastDayOfMonth,
+  getMonthName,
+} from "./utils/calendar";
+import { getDateYYYYMMDD } from "./utils/dateParser";
 
 /**FIREBASE CONFIGURATION AND INSTANCES */
 const firebaseConfig = {
@@ -32,13 +39,6 @@ export const connectTicketWithEmailGoogle = async () => {
 };
 export const connectTicketWithEmailFacebook = async () => {
   return await auth.signInWithPopup(providerFacebook);
-};
-
-export const updateTicketDocument = async (email, ticketID) => {
-  return firestore
-    .collection("tickets")
-    .doc(ticketID)
-    .update({ used: true, user: "" + email });
 };
 
 export const signInWithGoogle = async () => {
@@ -103,8 +103,63 @@ export const updateUserPassword = (currentPassword, newPassword) => {
       return error.message;
     });
 };
+//////////////////////ARTCAFFE///////////////////////////////
+export const getOpeningHours = async () => {
+  const docRef = doc(firestore, "opening_hours_schedule", "monday-sunday");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    console.log("Missing opening hours");
+  }
+};
+export const updateOpeningHours = async (openingHours) => {
+  const docRef = doc(firestore, "opening_hours_schedule", "monday-sunday");
+  return await updateDoc(docRef, { schedule: openingHours });
+};
 
-export const getUserTicket = async (ticketID) => {
-  var docRef = firestore.collection("tickets").doc(ticketID);
-  return docRef.get();
+export const generateMonthOpeningHours = async (date) => {
+  const monthName = getMonthName(date);
+  const docRef = doc(firestore, "openning_hours", monthName);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return "Error";
+  } else {
+    getOpeningHours()
+      .then((oh) => {
+        let data = {};
+        const openning_hours = oh.schedule;
+        const lastMonthDay = getLastDayOfMonth(date);
+        let tempDate = new Date(date);
+        let actualDay = getFirstDayIndex(date);
+        for (let a = 1; a <= lastMonthDay; a++) {
+          data[getDateYYYYMMDD(tempDate)] = {
+            end: openning_hours[actualDay * 2].toString(),
+            start: openning_hours[actualDay * 2 + 1].toString(),
+          };
+          if (actualDay == 6) actualDay = 0;
+          else actualDay++;
+          tempDate.setDate(tempDate.getDate() + 1);
+        }
+        setDoc(doc(firestore, "openning_hours", monthName), data)
+          .then(() => {
+            return "Success";
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+};
+export const getMonthOpeningHours = async (date) => {
+  const docRef = doc(firestore, "openning_hours", getMonthName(date));
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  } else {
+    return null;
+  }
 };
