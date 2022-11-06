@@ -6,7 +6,7 @@ import {
   Footer,
   Gallery,
   Header,
-  SpecialMenu,
+  SpecialMenu, Booking
 } from "./container";
 import UserProvider from "./providers/UserProvider";
 import { Navbar } from "./components";
@@ -14,6 +14,7 @@ import Reservation from "./components/ReservationManager/Reservation";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Particless from "./components/Particless/Particless";
+import CalendarUI from "./container/LayoutTesting/CalendarUI";
 
 const App = () => (
   <Router>
@@ -23,9 +24,10 @@ const App = () => (
         <Route
           path="/"
           element={
-            <div>
+            <>
               <Navbar />
               <Particless />
+              <CalendarUI />
               <Header />
               <AboutUs />
               <SpecialMenu />
@@ -33,7 +35,8 @@ const App = () => (
               <Gallery />
               <FindUs />
               <Footer />
-            </div>
+              <Booking />
+            </>
           }
         />
       </Routes>

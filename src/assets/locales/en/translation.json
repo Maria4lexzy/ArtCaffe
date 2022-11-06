@@ -4,5 +4,6 @@
     "menu": "Menu",
     "contact": "Contact",
     "language": "Language:",
-    "reserve_table": "Reserve table"
+    "reserve_table": "Reserve table",
+    "online_reservation":"Online Reservation"
 }

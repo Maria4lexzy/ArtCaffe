@@ -1,0 +1,44 @@
+.react-modal-sheet-backdrop {
+	/* custom styles */
+	background-color: yellow;
+}
+.react-modal-sheet-container {
+	/* custom styles */
+	background-color: green;
+}
+.react-modal-sheet-header {
+	/* custom styles */
+	background-color: blue;
+}
+.react-modal-sheet-drag-indicator {
+	/* custom styles */
+	background-color: red;
+}
+.react-modal-sheet-content {
+	/* custom styles */
+	background-color: var(--color-black);
+}
+
+.app__modalsheet {
+	display: flex;
+	flex-flow: column wrap;
+	align-content: stretch;
+	border: 2px solid green;
+	&-heading {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		padding: 16px;
+		background-color: rgba($color: red, $alpha: 0.6);
+		.language {
+			img {
+				width: 48px;
+				padding: 8px;
+			}
+		}
+	}
+	&-form {
+		padding: 16px;
+		background-color: rgba($color: yellow, $alpha: 0.6);
+	}
+}

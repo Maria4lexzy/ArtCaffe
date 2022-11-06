@@ -1,0 +1,78 @@
+.app__calendarui {
+	background-color: lightblue;
+	padding: 24px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	// text-align: center;
+	justify-content: center;
+
+	&--calendar {
+		border: 2px solid green;
+		.days {
+			padding: 10px 0;
+			background: #eee;
+			margin: 0;
+		}
+		ul {
+			list-style-type: none;
+			li {
+				display: inline-block;
+				width: 13.6%;
+				margin: 24px;
+				cursor: pointer;
+				color: var(--color-primary);
+				font-size: 24px;
+				text-align: center;
+				font-family: var(--font-base);
+				&:hover {
+					color: var(--color-white);
+				}
+			}
+		}
+	}
+	&--side-panel {
+		border: 2px solid red;
+		&-arrows {
+		}
+	}
+}
+
+// large screens
+@media screen and (min-width: 2000px) {
+	.app__calendarui {
+		&--calendar {
+		}
+		&--side_panel {
+		}
+	}
+}
+// desktops
+@media screen and (max-width: 1150px) {
+	.app__calendarui {
+		&--calendar {
+		}
+		&--side_panel {
+		}
+	}
+}
+// tablets
+@media screen and (max-width: 650px) {
+	.app__calendarui {
+		&--calendar {
+			flex: 100%;
+		}
+		&--side_panel {
+			flex: 100%;
+		}
+	}
+}
+// phones
+@media screen and (max-width: 350px) {
+	.app__calendarui {
+		&--calendar {
+		}
+		&--side_panel {
+		}
+	}
+}

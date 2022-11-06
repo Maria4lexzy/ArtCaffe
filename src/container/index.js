@@ -5,5 +5,6 @@ import Footer from "./Footer/Footer";
 import Gallery from "./Gallery/Gallery";
 import Header from "./Header/Header";
 import SpecialMenu from "./Menu/SpecialMenu";
+import Booking from "./LayoutTesting/Booking";
 
-export { AboutUs, Bartender, FindUs, Footer, Gallery, Header, SpecialMenu };
+export { Booking, AboutUs, Bartender, FindUs, Footer, Gallery, Header, SpecialMenu };
