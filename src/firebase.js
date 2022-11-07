@@ -7,7 +7,7 @@ import {
   getLastDayOfMonth,
   getMonthName,
 } from "./utils/calendar";
-import { getDateYYYYMMDD } from "./utils/dateParser";
+import { getDateYYYYMMDD, getDateYYYYMM } from "./utils/dateParser";
 
 /**FIREBASE CONFIGURATION AND INSTANCES */
 const firebaseConfig = {
@@ -163,3 +163,15 @@ export const getMonthOpeningHours = async (date) => {
     return null;
   }
 };
+export const getReservations = async (date) => {
+  const docRef = doc(firestore, "reservations", getDateYYYYMM(date));
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    console.log("exist")
+    return docSnap.data();
+  } else {
+    return null;
+  }
+
+};
+

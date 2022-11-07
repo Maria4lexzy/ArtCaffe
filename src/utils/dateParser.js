@@ -8,6 +8,9 @@ export const getDateYYYYMMDD = (date) => {
     .toISOString()
     .substring(0, 10);
 };
+export const getDateYYYYMM = (date) => {
+  return date.getFullYear() + '-' + (date.getMonth() + 1);
+};
 /**
  *
  * @param {string - date from which to return formated string} date
