@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Calendar.css";
+import "./OpeningHSchedule.scss";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { Table } from "react-bootstrap";

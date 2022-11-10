@@ -1,0 +1,68 @@
+.app__calendar_cell {
+  padding: 4px;
+  text-align: center;
+  transition: 0.5s ease;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
+  cursor: pointer;
+  color: var(--color-white);
+  font-weight: bold;
+  font-size: 16px;
+  font-family: var(--font-base);
+  border-radius: 50%;
+
+  &--day_field {
+    position: relative;
+    .event-marker {
+      border-radius: 50%;
+      background-color: var(--color-primary);
+
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      z-index: 15;
+      top: 80%;
+      left: 50%;
+    }
+  }
+
+  &:hover {
+    color: var(--color-primary);
+    background-color: #413f49fc;
+  }
+  &--today {
+    color: var(--color-primary);
+    border-radius: 50%;
+    background-color: #413f49fc;
+  }
+  &--faded-text {
+    color: var(--color-gray);
+  }
+}
+
+// tablets down
+@media screen and (max-width: 850px) {
+  .app__calendar_cell {
+    width: 64px;
+
+    line-height: 56px;
+  }
+}
+
+// small screens
+@media screen and (max-width: 650px) {
+  .app__calendar_cell {
+    width: 48px;
+    height: 40px;
+    line-height: 32px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .app__calendar_cell {
+    width: 40px;
+    height: 32px;
+    line-height: 24px;
+  }
+}

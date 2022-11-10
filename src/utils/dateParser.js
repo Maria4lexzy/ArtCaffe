@@ -43,3 +43,6 @@ export const calculateDateDifference = (a, b) => {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 };
+export const getDayName = (date, locale) => {
+  return date.toLocaleDateString(locale, { weekday: 'long' });
+}

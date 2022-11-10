@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
-import "./Calendar.css";
+import "./CalendarMonthView.scss";
 import {
   getFirstDayIndex,
   getWeekNumbers,
   getFirstDateFromWeekNo,
-  getLastDayOfMonth,
+  // getLastDayOfMonth,
 } from "../../utils/calendar.js";
-import { Table } from "react-bootstrap";
+
 import CalendarCell from "./CalendarCell";
 import store from "../../redux/configureStore";
+
 import {
   currentTitleAction,
   fistDateInWeekAction,
-  monthDataAction,
+  // monthDataAction,
 } from "../../redux/CalendarSlice";
 import { useDispatch } from "react-redux";
 import watch from "redux-watch";
-import { getMonthOpeningHours } from "../../firebase";
+// import { getMonthOpeningHours, getReservations } from "../../firebase";
 
 export default function CalendarMonthView(props) {
   //titleText needs to be same name as a slice initial state
@@ -31,18 +32,18 @@ export default function CalendarMonthView(props) {
   //added because calculation of first date in week was wrong if calendar displayed previous month dates
   const dispatch = useDispatch();
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
     "June",
     "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   // store is THE redux store
@@ -51,13 +52,14 @@ export default function CalendarMonthView(props) {
     const unsubscribeWData = store.subscribe(
       wData((newVal, oldVal, objectPath) => {
         if (newVal !== oldVal) {
-          getMonthOpeningHours(new Date())
-            .then((result) => {
-              renderCalendar(new Date(store.getState().calendar.date), result);
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          renderCalendar(new Date(store.getState().calendar.date), []);
+          // getReservations(new Date())
+          //   .then((result) => {
+
+          //   })
+          //   .catch((e) => {
+          //     console.log(e);
+          //   });
         }
       })
     );
@@ -162,7 +164,7 @@ export default function CalendarMonthView(props) {
           ("0" + (month - 1)).slice(-2) +
           `-` +
           ("0" + (prevLastDay - x + 1)).slice(-2),
-        classname: "faded-text",
+        classname: "--faded-text",
         daynumber: prevLastDay - x + 1,
         data: [],
       };
@@ -235,7 +237,7 @@ export default function CalendarMonthView(props) {
         newCell = {
           keyProp: year + `-` + +month + `-` + i,
           id: year + `-` + ("0" + month).slice(-2) + `-` + ("0" + i).slice(-2),
-          classname: "today",
+          classname: "--today",
           daynumber: i,
           data: dayData,
         };
@@ -243,7 +245,7 @@ export default function CalendarMonthView(props) {
         newCell = {
           keyProp: year + `-` + +month + `-` + i,
           id: year + `-` + ("0" + month).slice(-2) + `-` + ("0" + i).slice(-2),
-          classname: "",
+          classname: "--day_field",
           daynumber: i,
           data: dayData,
         };
@@ -298,7 +300,7 @@ export default function CalendarMonthView(props) {
           ("0" + (month + 1)).slice(-2) +
           `-` +
           ("0" + j).slice(-2),
-        classname: "faded-text",
+        classname: "--faded-text",
         daynumber: j,
         data: [],
       };
@@ -306,28 +308,31 @@ export default function CalendarMonthView(props) {
     }
     setSixthCalRow(daysArray);
   };
+  const dateClickedCell = (date) => {
+    props.dateClicked(date);
+  };
   return (
     <>
-      <div className="mt-5 calendar">
-        <Table bordered responsive="md" className="month">
-          <thead className="text-uppercase text-center">
+      <div className="app__month">
+        <table className="app__month--table">
+          <thead className="app__month--table-days">
             <tr>
               <th>Week no.</th>
-              <th>Mon</th>
-              <th>Tue</th>
-              <th>Wed</th>
-              <th>Thu</th>
-              <th>Fri</th>
-              <th>Sat</th>
-              <th>Sun</th>
+              <th>M</th>
+              <th>T</th>
+              <th>W</th>
+              <th>T</th>
+              <th>F</th>
+              <th>S</th>
+              <th>S</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="app__month--table-body">
             <tr key="row1tr">
               <td key="row1">
                 <div
                   key="weekRow1"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[0]}
@@ -343,6 +348,7 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
@@ -351,7 +357,7 @@ export default function CalendarMonthView(props) {
               <td key="row2">
                 <div
                   key="weekRow2"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[1]}
@@ -367,6 +373,7 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
@@ -375,7 +382,7 @@ export default function CalendarMonthView(props) {
               <td key="row3">
                 <div
                   key="weekRow3"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[2]}
@@ -391,6 +398,7 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
@@ -399,7 +407,7 @@ export default function CalendarMonthView(props) {
               <td key="row4">
                 <div
                   key="weekRow4"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[3]}
@@ -415,6 +423,7 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
@@ -423,7 +432,7 @@ export default function CalendarMonthView(props) {
               <td key="row5">
                 <div
                   key="weekRow5"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[4]}
@@ -439,6 +448,7 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
@@ -447,7 +457,7 @@ export default function CalendarMonthView(props) {
               <td key="row6">
                 <div
                   key="weekRow6"
-                  className="day-field"
+                  className="week_nr"
                   style={{ fontWeight: "bold" }}
                 >
                   {weekNumbers[5]}
@@ -463,12 +473,13 @@ export default function CalendarMonthView(props) {
                     data={cell.data}
                     key={cell.keyProp + "-CC"}
                     changeSelectedDropdown={changeSelectedDropdown}
+                    dateClicked={dateClickedCell}
                   />
                 );
               })}
             </tr>
           </tbody>
-        </Table>
+        </table>
       </div>
     </>
   );

@@ -98,12 +98,6 @@ export default function Calendar() {
   const dateClicked = (date) => {
     setDateSelected(date);
   };
-  const deleteReservation = () => {
-    console.log("delete function called");
-  };
-  const createReservation = () => {
-    console.log("create reservation function called");
-  };
 
   return (
     <>
@@ -149,11 +143,7 @@ export default function Calendar() {
             </div>
             <div className="create-new">
               <button type="button" class="custom__button--dark">
-                Add event{" "}
-                <BsPlus
-                  className="icon"
-                  onClick={() => createReservation("left")}
-                />
+                Add event <BsPlus />
               </button>
             </div>
           </div>
@@ -176,10 +166,7 @@ export default function Calendar() {
                           <p className="p__opensans phone">{data[1].phone}</p>
                           <p className="p__opensans email">{data[1].email}</p>
                         </div>
-                        <BsFillTrashFill
-                          className="icon"
-                          onClick={() => deleteReservation()}
-                        />
+                        <BsFillTrashFill className="icon" />
                       </div>
                     );
                   })

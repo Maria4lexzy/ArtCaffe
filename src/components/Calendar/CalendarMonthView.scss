@@ -1,0 +1,29 @@
+.app__month {
+  padding: 4px;
+  &--table {
+    &-days {
+      color: var(--color-primary);
+    }
+    &-body {
+      color: var(--color-primary);
+      font-family: var(--font-alt);
+      .week_nr {
+        padding: 4px;
+        color: var(--color-gray);
+      }
+    }
+  }
+}
+
+/* desktop*/
+@media screen and (max-width: 1240px) {
+  .app__month {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    &--table {
+      align-self: center;
+      justify-self: center;
+    }
+  }
+}

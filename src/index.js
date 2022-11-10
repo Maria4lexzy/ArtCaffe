@@ -3,7 +3,7 @@ import "./i18nextInit";
 import "./index.scss";
 import App from "./App";
 import store from "./redux/configureStore";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import { Provider } from "react-redux";
 const container = document.getElementById("root");
 const root = createRoot(container); // createRoot(container!) if you use TypeScript

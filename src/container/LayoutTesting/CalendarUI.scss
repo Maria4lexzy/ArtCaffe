@@ -9,27 +9,36 @@
 
 	&--calendar {
 		border: 2px solid green;
-		.days {
-			padding: 10px 0;
-			background: #eee;
-			margin: 0;
-		}
-		ul {
-			list-style-type: none;
-			li {
-				display: inline-block;
-				width: 13.6%;
-				margin: 24px;
-				cursor: pointer;
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		height: auto;
+		div {
+			font-weight: bold;
+			border-radius: 8px;
+			min-width: 100px;
+			line-height: 100px;
+			height: 100px;
+			text-align: center;
+			margin: 5px;
+
+			cursor: pointer;
+			color: var(--color-white);
+			font-size: 24px;
+			text-align: center;
+			font-family: var(--font-base);
+			&:hover {
 				color: var(--color-primary);
-				font-size: 24px;
-				text-align: center;
-				font-family: var(--font-base);
-				&:hover {
-					color: var(--color-white);
-				}
 			}
 		}
+		// display: inline-block;
+		// 		width: 13.6%;
+		// 		margin: 24px;
+		// 		cursor: pointer;
+		// 		color: var(--color-primary);
+		// 		font-size: 24px;
+		// 		text-align: center;
+		// 		font-family: var(--font-base);
 	}
 	&--side-panel {
 		border: 2px solid red;

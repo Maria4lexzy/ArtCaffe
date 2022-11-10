@@ -1,25 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
+import "./CalendarCell.scss";
 
 //mouse events
-const initialState = {
-  mouseX: null,
-  mouseY: null,
-};
-export default function WorkerCalendarCell(props) {
-  const [state, setState] = useState(initialState);
-  const [selectedDay, setSelectedDay] = useState("");
-  const rightClickRef = useRef();
-  const handleRightClick = (event, key) => {
-    event.preventDefault();
-    setSelectedDay(key);
-    setState({
-      mouseX: event.clientX - 2,
-      mouseY: event.clientY - 4,
-    });
-  };
 
+export default function WorkerCalendarCell(props) {
+  const rightClickRef = useRef();
+  const { monthData } = useSelector((state) => state.calendar);
   const handleDetailsDialog = (event, key) => {
-    console.log("ss");
+    props.dateClicked(props.id);
+    console.log(monthData);
   };
 
   return (
@@ -27,26 +17,34 @@ export default function WorkerCalendarCell(props) {
       <td
         ref={rightClickRef}
         onClick={(e) => handleDetailsDialog(e, props)}
-        onContextMenu={(e) => handleRightClick(e, props.id)}
-        className={props.classname}
+        className="app__calendar_cell"
         key={props.keyProp}
         id={props.id}
       >
-        <div className="day-field">{props.daynumber}</div>
-        <div className="events-wrapper mt-5">
+        <div className={"app__calendar_cell" + props.classname}>
+          {monthData[props.id] ? (
+            <>
+              {props.daynumber}
+              <div className="event-marker"></div>
+            </>
+          ) : (
+            <>{props.daynumber}</>
+          )}
+
           {props.data && (
             <div
-              style={{ cursor: "context-menu" }}
-              className={props.data.worker_state + "  px-1 monthEventStyles"}
+              className={props.data.worker_state + "events"}
               key={props.data.worker_state + props.keyProp}
               id={props.data.worker_state + "_" + props.keyProp}
             >
-              <p className="" style={{ color: "black" }}>
-                {props.data.start}-{props.data.end}
+              {" "}
+              <p className="data">
+                {props.data.start}
+                {props.data.end}
               </p>
             </div>
           )}
-        </div>
+        </div>{" "}
       </td>
     </>
   );
