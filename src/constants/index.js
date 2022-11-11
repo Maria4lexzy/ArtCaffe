@@ -1,6 +1,5 @@
-import pics from './pics';
-import meal from '../assets/meal.mp4';
-import data from './data';
-import dateTimeSettings from './dateTimeSettings';
-
-export { pics, meal, data, dateTimeSettings };
+import pics from "./pics";
+import data from "./data";
+import dateTimeSettings from "./dateTimeSettings";
+import tables from "./tables";
+export { pics, data, dateTimeSettings, tables };

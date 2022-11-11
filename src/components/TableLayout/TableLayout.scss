@@ -1,0 +1,43 @@
+.targets {
+    font-weight: bold;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: absolute;
+    text-align: center;
+
+    &:hover,
+    :focus {
+        filter: invert(52%) sepia(61%) saturate(5070%) hue-rotate(348deg) brightness(99%) contrast(92%);
+    }
+
+    &.selected {
+        filter: invert(52%) sepia(61%) saturate(5070%) hue-rotate(348deg) brightness(99%) contrast(92%);
+    }
+
+    &.disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    &.small_disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    .table_img {
+        position: relative;
+        text-align: center;
+        color: white !important;
+        opacity: 1;
+    }
+
+    .reserved {
+        position: absolute;
+        filter: invert(52%) sepia(61%) saturate(5070%) hue-rotate(348deg) brightness(99%) contrast(92%) !important;
+        opacity: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

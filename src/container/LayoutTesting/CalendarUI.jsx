@@ -1,59 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 
-import './CalendarUI.scss';
-import { pics } from '../../constants';
-
-import { BsArrowLeftShort, BsArrowRightShort } from 'react-icons/bs'
+import "./CalendarUI.scss";
+import ReserveTable from "../../components/Reservation/ReserveTable";
 
 const CalendarUI = () => {
   const scrollRef = useRef(null);
   const scroll = (direction) => {
     console.log("btn clicked");
-  }
-  const makeDivs = divs => {
-    for (var i = 0; i < 10; i++) {
-      console.log(i);
-    }
-  }
+  };
   return (
-
-    <div className='app__calendarui'>
-      <div id="calendar" className='app__calendarui--calendar'>
-        {/* <!-- use empty divs to create empty cells --> */}
-
-        {/* flex start here */}
-        <div class="day">1</div>
-        <div class="day">2</div>
-        <div class="day">3</div>
-        <div class="day">4</div>
-        <div class="day">5</div>
-        <div class="day">6</div>
-        <div class="day">7</div>
-        <div class="day">8</div>
-        <div class="day">9</div>
-        <div class="day">10</div>
-        <div class="day">11</div>
-        <div class="day">12</div>
-        <div class="day">13</div>
-        <div class="day">14</div>
-        <div class="day">15</div>
-        <div class="day">16</div>
-        <div class="day">17</div>
-        <div class="day">18</div>
-        <div class="day">19</div>
-        <div class="day">20</div>
-        <div class="day">21</div>
-        <div class="day">22</div>
-        <div class="day">23</div>
-        <div class="day">24</div>
-        <div class="day">25</div>
-        <div class="day">26</div>
-        <div class="day">27</div>
-        <div class="day">28</div>
-        <div class="day">29</div>
-        <div class="day">30</div>
-        <div class="day">31</div>
-      </div>
+    <div className="app__calendarui ">
+      <ReserveTable />
+      {/*      
       <div className="app__calendarui--side-panel">
         <div className='app__calendarui--side_panel-arrows'>
           <BsArrowLeftShort className='arrow-icon' onClick={() => scroll('left')} />
@@ -61,13 +19,41 @@ const CalendarUI = () => {
         </div>
       </div>
       <div className="app__calendarui--calendar">
-        { }
-      </div>
-
+        <ul class="days">
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+          <li>4</li>
+          <li>5</li>
+          <li>6</li>
+          <li>7</li>
+          <li>8</li>
+          <li>9</li>
+          <li><span class="active">10</span></li>
+          <li>11</li>
+          <li>12</li>
+          <li>13</li>
+          <li>14</li>
+          <li>15</li>
+          <li>16</li>
+          <li>17</li>
+          <li>18</li>
+          <li>19</li>
+          <li>20</li>
+          <li>21</li>
+          <li>22</li>
+          <li>23</li>
+          <li>24</li>
+          <li>25</li>
+          <li>26</li>
+          <li>27</li>
+          <li>28</li>
+          <li>29</li>
+          <li>30</li>
+          <li>31</li>
+        </ul>
+      </div> */}
     </div>
-
-
-
   );
-}
+};
 export default CalendarUI;
