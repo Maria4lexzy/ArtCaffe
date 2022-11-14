@@ -5,7 +5,7 @@ import { UserContext } from "../../providers/UserProvider";
 import SignInPage from "./SignInPage";
 import { signOutUser } from "../../firebase";
 import Calendar from "../Calendar/Calendar";
-import OpeningHSchedule from "../Calendar/OpeningHSchedule";
+//import OpeningHSchedule from "../Calendar/OpeningHSchedule";
 import SubHeading from "../SubHeading/SubHeading";
 const Reservation = () => {
   const user = useContext(UserContext);
@@ -31,7 +31,7 @@ const Reservation = () => {
         <Calendar />
       </div>
       <div className="app__reservation--schedule">
-        <OpeningHSchedule />
+        {/*<OpeningHSchedule />*/}
       </div>
     </div>
   ) : (

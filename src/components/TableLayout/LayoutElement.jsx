@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./TableLayout.scss";
 import { useSelector } from "react-redux";
 export default function LayoutElement(props) {
-  // Changes in rotate throttle may lead to invalid "left" and "top"
-  const throttles = { drag: 10, resize: 10, rotate: 90 };
-  const bounds = { left: 0, top: 0, right: 490, bottom: 490 };
   const { properties } = props;
   const [isClicked, setIsClicked] = useState(false);
-  const [target, setTarget] = useState();
   const { selected, disabled, disabledSmall } = useSelector(
     (state) => state.reservations
   );
-  useEffect(() => {
-    setTarget(document.getElementById(properties.id));
-  }, [properties.id, properties.classSelector]);
+  useEffect(() => {}, [properties.id, properties.classSelector]);
 
   const generateStyleObject = (attributes) => ({
     width: `${attributes.width}px`,

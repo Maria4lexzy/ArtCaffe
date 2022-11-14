@@ -31,7 +31,7 @@ const populateSelect = () => {
   for (let i = 1; i <= 12; i++) {
     list.push(i);
   }
-  console.log(list);
+
   return list;
 };
 export default function Calendar() {
@@ -67,7 +67,6 @@ export default function Calendar() {
     let firstDayInMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     getReservations(today)
       .then((result) => {
-        console.log(result);
         dispatch(monthDataAction({ month: result }));
         setDateSelected(getDateYYYYMMDD(today));
       })
@@ -155,7 +154,6 @@ export default function Calendar() {
         data.time
       )
         .then((result) => {
-          console.log(result);
           if (result === "success") {
             toast.success("Reservation created");
           } else if (result === "error") {

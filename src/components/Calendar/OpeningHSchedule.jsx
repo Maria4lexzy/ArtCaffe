@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./OpeningHSchedule.scss";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
@@ -8,8 +8,8 @@ import { getOpeningHours, updateOpeningHours } from "../../firebase";
 import { Button } from "react-bootstrap";
 export default function OpeningHSchedule() {
   const [openningHours, setOpeningHours] = useState([]);
-  const [startH, setStartH] = useState({});
-  const [endH, setEndH] = useState({});
+  //const [startH, setStartH] = useState({});
+  //const [endH, setEndH] = useState({});
   const [day, setDay] = useState("");
   const [isChanged, setIsChanged] = useState(false);
   const getOpeningH = () => {
@@ -23,9 +23,10 @@ export default function OpeningHSchedule() {
   };
   const changeOpeningH = () => {
     let oh = openningHours;
-    const start = new Date(startH * 1000).toISOString().slice(11, 16);
-    const end = new Date(endH * 1000).toISOString().slice(11, 16);
-    console.log(start);
+    //const start = new Date(startH * 1000).toISOString().slice(11, 16);
+    //const end = new Date(endH * 1000).toISOString().slice(11, 16);
+    const start = new Date(1000).toISOString().slice(11, 16);
+    const end = new Date(1000).toISOString().slice(11, 16);
     switch (day) {
       case "Monday": {
         oh[0] = start;
@@ -66,13 +67,6 @@ export default function OpeningHSchedule() {
         break;
     }
     setIsChanged(true);
-    console.log(oh);
-  };
-  const handleStartTimeChange = (time) => {
-    setStartH(time);
-  };
-  const handleEndTimeChange = (time) => {
-    setEndH(time);
   };
   const handleSelectDay = (e) => {
     setDay(e.target.value);
@@ -81,7 +75,6 @@ export default function OpeningHSchedule() {
   const updateOpeningH = () => {
     updateOpeningHours(openningHours)
       .then((response) => {
-        console.log(openningHours);
         setIsChanged(false);
       })
       .catch((e) => {

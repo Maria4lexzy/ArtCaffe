@@ -1,13 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  setDoc,
-  runTransaction,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc, runTransaction } from "firebase/firestore";
 import {
   getFirstDayIndex,
   getLastDayOfMonth,
@@ -173,7 +167,7 @@ export const generateMonthOpeningHours = async (date) => {
                 start: openning_hours[actualDay * 2].toString(),
                 end: openning_hours[actualDay * 2 + 1].toString(),
               };
-              if (actualDay == 6) actualDay = 0;
+              if (actualDay === 6) actualDay = 0;
               else actualDay++;
               tempDate.setDate(tempDate.getDate() + 1);
             }
@@ -203,7 +197,7 @@ export const generateMonthOpeningHours = async (date) => {
                   start: openning_hours[actualDay * 2].toString(),
                   end: openning_hours[actualDay * 2 + 1].toString(),
                 };
-                if (actualDay == 6) actualDay = 0;
+                if (actualDay === 6) actualDay = 0;
                 else actualDay++;
                 tempDate.setDate(tempDate.getDate() + 1);
               }
@@ -241,7 +235,6 @@ export const getReservations = async (date) => {
   const docRef = doc(firestore, "reservations", getDateYYYYMM(date));
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log("exist");
     return docSnap.data();
   } else {
     return null;
@@ -301,7 +294,6 @@ export const createReservation = async (
         });
         //check fi there is multiple tables
         if (table.length > 1) {
-          console.log("bigger");
           //starts from 1 since first document is already written
           for (let i = 1; i < table.length; i++) {
             const dayTable = day + "." + table[i];
@@ -349,7 +341,6 @@ export const createReservation = async (
           });
           //check fi there is multiple tables
           if (table.length > 1) {
-            console.log("bigger");
             //starts from 1 since first document is already written
             for (let i = 1; i < table.length; i++) {
               const dayTable = day + "." + table[i];

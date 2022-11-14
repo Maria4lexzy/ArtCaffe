@@ -1,38 +1,33 @@
-import React, { createRef } from 'react';
-import { pics } from '../../constants'
-import './ModalSheet.scss'
-import Sheet from 'react-modal-sheet';
-import { useState } from 'react';
-import SubHeading from '../SubHeading/SubHeading';
-import { useTranslation } from 'react-i18next';
-
-const datepickerRef = createRef();
-var rdated_data = '"10-10-2022", "11-10-2022", "20-10-2022"';
+import React from "react";
+import { pics } from "../../constants";
+import "./ModalSheet.scss";
+import Sheet from "react-modal-sheet";
+import { useState } from "react";
+import SubHeading from "../SubHeading/SubHeading";
+import { useTranslation } from "react-i18next";
 
 const ModalSheet = () => {
   const { t } = useTranslation();
-  const [date, setDate] = useState("");
   const [isOpen, setOpen] = useState(false);
-  let selectedDate = 0;
-  let currentDate = new Date();
-
-  let selectedDateWithCurrentTime = new Date()
 
   return (
-
     <>
       <div>
         <h1>hello</h1>
-        <form>
-
-        </form>
+        <form></form>
       </div>
 
-      <button className='custom__button' type='button' onClick={() => setOpen(true)}>{t("Book Table")}</button>
+      <button
+        className="custom__button"
+        type="button"
+        onClick={() => setOpen(true)}
+      >
+        {t("Book Table")}
+      </button>
       <Sheet
         isOpen={isOpen}
         onClose={() => setOpen(false)}
-      // detent="content-height"
+        // detent="content-height"
       >
         <Sheet.Container>
           <Sheet.Header />
@@ -47,15 +42,10 @@ const ModalSheet = () => {
                     <img src={pics.sk} alt="Slovak Flag" />
                   </div>
                 </div>
-
               </div>
               <div className="app__modalsheet-form">
-                <form>
-
-
-                </form>
+                <form></form>
               </div>
-
             </div>
           </Sheet.Content>
         </Sheet.Container>
@@ -64,6 +54,6 @@ const ModalSheet = () => {
       </Sheet>
     </>
   );
-}
+};
 
 export default ModalSheet;

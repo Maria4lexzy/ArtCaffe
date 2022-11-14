@@ -9,7 +9,6 @@ export default function WorkerCalendarCell(props) {
   const { monthData } = useSelector((state) => state.calendar);
   const handleDetailsDialog = (event, key) => {
     props.dateClicked(props.id);
-    console.log(monthData);
   };
 
   return (

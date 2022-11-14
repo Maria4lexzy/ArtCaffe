@@ -4,11 +4,9 @@ import {
   TransformComponent,
 } from "@pronestor/react-zoom-pan-pinch";
 import LayoutElement from "./LayoutElement";
-import { selectedAction } from "../../redux/ReservationLayoutSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 export default function RoomLayout(props) {
   //////////////////TODO: error selecting 3 tables
-  const dispatch = useDispatch();
   const { selected } = useSelector((state) => state.reservations);
   const clickedElement = (element) => {
     if (

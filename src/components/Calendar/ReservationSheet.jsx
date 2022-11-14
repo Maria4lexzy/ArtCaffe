@@ -19,7 +19,6 @@ const ReservationSheet = ({ handleOpenClose }) => {
   let selectedDateWithCurrentTime = new Date();
   const openClose = () => {
     setOpen(handleOpenClose);
-    console.log(handleOpenClose);
   };
   return (
     <div className="app__reservationsheet">

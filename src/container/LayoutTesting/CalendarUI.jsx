@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 
 import "./CalendarUI.scss";
 import ReserveTable from "../../components/Reservation/ReserveTable";
