@@ -23,7 +23,7 @@ export default function Layout() {
       if (tableCombinations.length > 0) {
         //WARNING: it will take first possible combination for the table
         let tableNotFound = true;
-        console.log(tableCombinations);
+
         tableCombinations.every((tableComb) => {
           //check if its table from same room othervise skip loop
           if (tableComb[0].substring(0, 1) === table.substring(0, 1)) {

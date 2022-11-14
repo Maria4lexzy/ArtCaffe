@@ -251,7 +251,6 @@ export const getReservationsPublic = async (date) => {
   const docRef = doc(firestore, "reservations_public", getDateYYYYMM(date));
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log("exist");
     return docSnap.data();
   } else {
     return null;

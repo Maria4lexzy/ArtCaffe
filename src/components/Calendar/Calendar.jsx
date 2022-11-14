@@ -59,7 +59,6 @@ export default function Calendar() {
   const tables_ref = useRef("");
   const name_ref = useRef("");
   const email_ref = useRef("");
-  const phone_ref = useRef("");
   const time_ref = useRef("");
 
   useEffect(() => {

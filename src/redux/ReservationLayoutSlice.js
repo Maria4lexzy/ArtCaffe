@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const reservationLayoutSlice = createSlice({
   name: "reservations",
   initialState: {
-    disabled: [],
+    disabled: {},
     disabledSmall: {},
     tableCombinations: [],
     selected: [],

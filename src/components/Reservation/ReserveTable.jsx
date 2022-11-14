@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
 import { setMinutes, setHours } from "date-fns";
@@ -11,7 +11,6 @@ import {
   getReservationsPublic,
   createReservation,
   getThreeMonthsOpeningHours,
-  generateMonthOpeningHours,
 } from "../../firebase";
 import {
   tableCombinationsAction,
@@ -20,12 +19,8 @@ import {
 } from "../../redux/ReservationLayoutSlice";
 import { tables } from "../../constants";
 import Layout from "../TableLayout/Layout";
-import { getMonthName } from "../../utils/calendar";
-import {
-  getDateYYYYMMDD,
-  getDateYYYYMMDDHHMMSS,
-  getDateHHMMSS,
-} from "../../utils/dateParser";
+import { getMonthName, getFirstDayIndex } from "../../utils/calendar";
+import { getDateYYYYMMDD, getDateHHMMSS } from "../../utils/dateParser";
 const ReserveTable = () => {
   const { selected, disabled } = useSelector((state) => state.reservations);
   const dispatch = useDispatch();
@@ -35,19 +30,20 @@ const ReserveTable = () => {
   const phone = useRef();
   const [selectedTime, setSelectedTime] = useState(null);
   const [numberOfPeople, setNumberOfPeople] = useState(0);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [reservationStep, setReservationStep] = useState(0);
   const [openningHours, setOpenningHours] = useState({});
   const [closedDays, setClosedDays] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
   const reserveTable = () => {
     createReservation(
       date,
-      fName.current.value + " " + lName.current.value,
-      phone.current.value,
-      email.current.value,
+      userInfo[0] + " " + userInfo[1],
+      userInfo[2],
+      userInfo[3],
       numberOfPeople,
       selected,
-      selectedTime
+      getDateHHMMSS(selectedTime)
     )
       .then((message) => {
         console.log(message);
@@ -73,12 +69,12 @@ const ReserveTable = () => {
   };
   const handleSelectChange = (e) => {
     const numberOfPeople = e.target.value;
-    console.log(numberOfPeople);
+
     setNumberOfPeople(numberOfPeople);
   };
   const handleNextBtn = () => {
     ///////////////problem switch case is not calling case 3
-    console.log(reservationStep);
+
     switch (reservationStep) {
       case 0: {
         if (numberOfPeople > 0) {
@@ -101,7 +97,7 @@ const ReserveTable = () => {
               });
             });
             let disabledTables = {};
-            tables.tableSizes.map((table) => {
+            tables.tableSizes.forEach((table) => {
               if (allowedTables[table.name] === undefined)
                 disabledTables[table.name] = table.people;
             });
@@ -117,7 +113,7 @@ const ReserveTable = () => {
           getThreeMonthsOpeningHours(new Date())
             .then((results) => {
               setOpenningHours(results);
-              console.log(results);
+
               getExcludeDays(results);
               setReservationStep(1);
             })
@@ -130,13 +126,34 @@ const ReserveTable = () => {
         break;
       }
       case 1: {
-        if (date !== "") {
-          getReservationsPublic(new Date(date))
+        if (date) {
+          getReservationsPublic(date)
             .then((results) => {
-              if (results)
-                if (results[date])
-                  dispatch(disabledAction({ newDisabled: results[date] }));
+              let disabled = {};
 
+              if (results) {
+                if (results[getDateYYYYMMDD(date)]) {
+                  //disable sofa if there is less people than 9 and it's Friday or Saturday
+                  disabled = results[getDateYYYYMMDD(date)];
+                  if (
+                    getFirstDayIndex(date) === 4 ||
+                    (getFirstDayIndex(date) === 5 &&
+                      numberOfPeople < 9 &&
+                      !disabled["Sofa"])
+                  ) {
+                    disabled["Sofa"] = "Reservation for more than 9 people";
+                  }
+                  dispatch(disabledAction({ newDisabled: disabled }));
+                } else {
+                  if (
+                    getFirstDayIndex(date) === 4 ||
+                    (getFirstDayIndex(date) === 5 && numberOfPeople < 9)
+                  ) {
+                    disabled["Sofa"] = "For more than 8 people";
+                  }
+                  dispatch(disabledAction({ newDisabled: disabled }));
+                }
+              }
               setReservationStep(2);
             })
             .catch((e) => {
@@ -160,14 +177,20 @@ const ReserveTable = () => {
           lName.current.value &&
           phone.current.value &&
           email.current.value
-        )
+        ) {
+          setUserInfo([
+            fName.current.value,
+            lName.current.value,
+            phone.current.value,
+            email.current.value,
+          ]);
           setReservationStep(4);
-        else {
+        } else {
           console.log("empty");
           //display WARNING table not selected
         }
+        break;
       }
-
       default:
         break;
     }
@@ -185,6 +208,10 @@ const ReserveTable = () => {
       }
       case 3: {
         setReservationStep(2);
+        break;
+      }
+      case 4: {
+        setReservationStep(3);
         break;
       }
       default:
@@ -271,10 +298,10 @@ const ReserveTable = () => {
         return (
           <>
             <p>
-              Reservation on {getDateYYYYMMDDHHMMSS(date)} at{" "}
+              Reservation on {getDateYYYYMMDD(date)} at{" "}
               {getDateHHMMSS(selectedTime)}
             </p>
-            <p> Name: {fName.current.value + " " + lName.current.value}</p>
+            <p> Name: {userInfo[0] + " " + userInfo[1]}</p>
             <p> For {numberOfPeople} people</p>
             <div>
               {" "}
@@ -283,12 +310,8 @@ const ReserveTable = () => {
                 return <p key={t}>{t},</p>;
               })}{" "}
             </div>
-            <p>
-              Phone(will be used to confim reservation): {phone.current.value}
-            </p>
-            <p>
-              Email(you will receive e-mail confirmation): {email.current.value}
-            </p>
+            <p>Phone(will be used to confim reservation): {userInfo[2]}</p>
+            <p>Email(you will receive e-mail confirmation): {userInfo[3]}</p>
             <button type="button" onClick={() => reserveTable()}>
               Confirm reservations
             </button>
@@ -325,8 +348,7 @@ const ReserveTable = () => {
       timeString =
         openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["end"];
     }
-    console.log(timeString.substring(0, 2));
-    console.log(timeString.substring(3, 5));
+
     return setHours(
       setMinutes(new Date(), timeString.substring(3, 5)),
       timeString.substring(0, 2) - 1
@@ -336,7 +358,7 @@ const ReserveTable = () => {
     let days = [];
     let date = new Date();
     for (let i = 0; i < 4; i++) {
-      results["Closed"][getMonthName(date)].map((day) => {
+      results["Closed"][getMonthName(date)].forEach((day) => {
         days.push(new Date(day));
       });
       date.setMonth(date.getMonth() + 1);

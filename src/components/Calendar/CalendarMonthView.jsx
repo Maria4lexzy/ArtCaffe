@@ -187,7 +187,6 @@ export default function CalendarMonthView(props) {
     const year = updatedDate.getFullYear();
     const month = updatedDate.getMonth() + 1;
     let printedRows = 0;
-    let printedDays = 0;
     for (let i = 1; i <= lastDay; i++) {
       if (numberOfPrintedDays % 7 === 0 && numberOfPrintedDays !== 0) {
         switch (printedRows) {
@@ -250,7 +249,6 @@ export default function CalendarMonthView(props) {
           data: dayData,
         };
       }
-      printedDays++;
       daysArray.push(newCell);
       numberOfPrintedDays++;
     }

@@ -13,7 +13,6 @@ export default function LayoutElement(props) {
   );
   useEffect(() => {
     setTarget(document.getElementById(properties.id));
-    console.log(properties);
   }, [properties.id, properties.classSelector]);
 
   const generateStyleObject = (attributes) => ({

@@ -19,7 +19,6 @@ export default function RoomLayout(props) {
       )
     )
       props.handleTableClick(element);
-    console.log(element);
   };
   return (
     <TransformWrapper
