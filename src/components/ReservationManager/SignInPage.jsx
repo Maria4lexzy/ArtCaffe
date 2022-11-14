@@ -51,19 +51,29 @@ const SignInPage = () => {
   }
   return (
     <>
-
-
-      <div className="app__sign_in app__bg app__wrapper section__padding" id="login">
+      <div
+        className="app__sign_in app__bg app__wrapper section__padding"
+        id="login"
+      >
         <div className="app__sign_in-content">
-          <div className='app__sign_in-content-heading'>
+          <div className="app__sign_in-content-heading">
             <SubHeading title="Admin Log In" />
           </div>
-          <div className='app__sign_in-content-input flex__center'>
-            <input type='email' ref={emailRef} placeholer='Enter Admin Email'></input>
-            <input type='password' ref={passwordRef} placeholer='Enter Admin Password'></input>
-            <button onClick={handleSignIn} className="custom__button">Log In</button>
+          <div className="app__sign_in-content-input flex__center">
+            <input
+              type="email"
+              ref={emailRef}
+              placeholder="Enter Admin Email"
+            ></input>
+            <input
+              type="password"
+              ref={passwordRef}
+              placeholder="Enter Admin Password"
+            ></input>
+            <button onClick={handleSignIn} className="custom__button">
+              Log In
+            </button>
           </div>
-
         </div>
 
         <div className="app__sign_in-img">

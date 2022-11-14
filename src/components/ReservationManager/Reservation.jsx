@@ -31,7 +31,7 @@ const Reservation = () => {
         <Calendar />
       </div>
       <div className="app__reservation--schedule">
-        {/* <OpeningHSchedule /> */}
+        <OpeningHSchedule />
       </div>
     </div>
   ) : (

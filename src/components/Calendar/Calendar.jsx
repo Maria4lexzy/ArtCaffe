@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 import "./Calendar.scss";
 import "./ReservationSheet.scss";
 import CalendarMonthView from "./CalendarMonthView";
@@ -26,14 +28,14 @@ import SubHeading from "../SubHeading/SubHeading";
 const populateSelect = () => {
   let list = [];
 
-  for (let i = 0; i <= 12; i++) {
+  for (let i = 1; i <= 12; i++) {
     list.push(i);
   }
   console.log(list);
   return list;
 };
 export default function Calendar() {
-  const { loading, date, calendarTitle, monthData } = useSelector(
+  const { date, calendarTitle, monthData } = useSelector(
     (state) => state.calendar
   );
 
@@ -41,6 +43,18 @@ export default function Calendar() {
   const [isModalOpen, setOpenModal] = useState(false);
   const [dateSelected, setDateSelected] = useState("");
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      guests: "1",
+      table: "T1, T4",
+      name: "Alex",
+      emai: "alex@gmail.com",
+    },
+  });
   const nr_guest_ref = useRef(0);
   const tables_ref = useRef("");
   const name_ref = useRef("");
@@ -121,30 +135,32 @@ export default function Calendar() {
     console.log("delete function called");
   };
 
-  async function submitReservation(e) {
-    e.preventDefault();
+  async function submitReservation(data) {
+    // e.preventDefault();
     let tables = [];
-    if (tables_ref.current.value.length > 2) {
+    if (data.table.length > 2) {
       tables = tables_ref.current.value.split(",");
     } else tables = tables_ref.current.value;
     try {
       createReservation(
         new Date(date),
-        name_ref.current.value,
-        phone_ref.current.value,
-        email_ref.current.value,
-        nr_guest_ref.current.value,
+        // name_ref.current.value,
+        // phone_ref.current.value,
+        // email_ref.current.value,
+        // nr_guest_ref.current.value,
+        data.name,
+        data.phone,
+        data.email,
+        data.guests,
         tables,
-        time_ref.current.value
+        data.time
       )
         .then((result) => {
           console.log(result);
-          if (result.code === "auth/wrong-password") {
-            //setError(language.wrong_password);
-            //setLoading(false);
-          } else if (result.code === "auth/too-many-requests") {
-            //setError(language.too_many_requests);
-            //setLoading(false);
+          if (result === "success") {
+            toast.success("Reservation created");
+          } else if (result === "error") {
+            toast.error("problemoo");
           }
         })
         .catch(function (error) {
@@ -158,7 +174,6 @@ export default function Calendar() {
       console.log(e);
     }
   }
-  async function handleSubmitReservation() {}
 
   return (
     <>
@@ -222,7 +237,7 @@ export default function Calendar() {
                     return (
                       <div className="event" key={index}>
                         <datetime
-                          datetime="20:00"
+                          dateTime="20:00"
                           className="p__cormorant time"
                         >
                           {data[1].time}
@@ -260,18 +275,23 @@ export default function Calendar() {
           <Sheet.Container>
             <Sheet.Header />
             <Sheet.Content>
+              <Toaster />
               <div className="app__reservationsheet">
                 <div className="app__modalsheet-heading">
-                  <SubHeading title="Create ss Reservation Reservation" />
+                  <SubHeading title="Create Reservation Reservation" />
                 </div>
-                <div className="app__reservationsheet-input ">
+                <form
+                  className="app__reservationsheet-input "
+                  onSubmit={handleSubmit((data) => submitReservation(data))}
+                >
                   <div>
-                    <label className="p__opensans" htmlForm="guests">
+                    <label className="p__opensans" htmlFor="guests">
                       Guests
                     </label>
                     <select
                       required
                       ref={nr_guest_ref}
+                      {...register("guests")}
                       name="guests"
                       id="guest"
                     >
@@ -285,75 +305,76 @@ export default function Calendar() {
                     </select>
                   </div>
                   <div>
-                    <label className="p__opensans" htmlForm="table">
+                    <label className="p__opensans" htmlFor="table">
                       Table(s)
                     </label>
                     <input
-                      ref={tables_ref}
+                      {...register("table", { required: true })}
                       type="text"
                       name="table"
+                      ref={tables_ref}
                       placeholder="T4, T1"
                       required
                     />
                   </div>
-
                   <div>
-                    <label className="p__opensans" htmlForm="name">
+                    <label className="p__opensans" htmlFor="name">
                       Name
                     </label>
                     <input
-                      ref={name_ref}
+                      {...register("name", { required: true })}
                       type="text"
                       name="name"
+                      ref={name_ref}
                       placeholder="Jakub"
                       required
                     />
                   </div>
                   <div>
-                    <label className="p__opensans" htmlForm="email">
+                    <label className="p__opensans" htmlFor="email">
                       Email
                     </label>
                     <input
                       type="email"
                       name="email"
                       ref={email_ref}
+                      {...register("email")}
                       placeholder="example@gmail.com"
                     />
                   </div>
                   <div>
-                    <label className="p__opensans" htmlForm="number">
+                    <label className="p__opensans" htmlFor="number">
                       Phone Number
                     </label>
                     <input
                       type="tel"
                       name="phone"
-                      ref={phone_ref}
+                      {...register("phone")}
                       placeholder="+427 55 89 46"
                     />
                   </div>
                   <div>
-                    <label className="p__opensans" htmlForm="time">
+                    <label className="p__opensans" htmlFor="time">
                       Time
                     </label>
                     <input
+                      ref={time_ref}
                       type="time"
                       name="time"
                       id="appt"
                       min="18:00"
                       max="23:00"
-                      ref={time_ref}
-                      required
+                      // ref={time_ref}
+                      {...register("time", { required: true })}
                     />
                   </div>
-
-                  <button
-                    onClick={submitReservation}
-                    type="submit"
-                    className="custom__button"
-                  >
+                  {errors.exampleRequired && (
+                    <span>This field is required</span>
+                  )}
+                  <button type="submit" className="custom__button">
                     Reserve
                   </button>
-                </div>
+                </form>
               </div>
             </Sheet.Content>
           </Sheet.Container>
