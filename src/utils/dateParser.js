@@ -9,7 +9,7 @@ export const getDateYYYYMMDD = (date) => {
     .substring(0, 10);
 };
 export const getDateYYYYMM = (date) => {
-  return date.getFullYear() + '-' + (date.getMonth() + 1);
+  return date.getFullYear() + "-" + (date.getMonth() + 1);
 };
 /**
  *
@@ -44,5 +44,5 @@ export const calculateDateDifference = (a, b) => {
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 };
 export const getDayName = (date, locale) => {
-  return date.toLocaleDateString(locale, { weekday: 'long' });
-}
+  return date.toLocaleDateString(locale, { weekday: "long" });
+};

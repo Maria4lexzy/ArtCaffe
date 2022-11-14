@@ -125,48 +125,116 @@ export const updateOpeningHours = async (openingHours) => {
 };
 
 export const generateMonthOpeningHours = async (date) => {
-  const monthName = getMonthName(date);
-  const docRef = doc(firestore, "openning_hours", monthName);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return "Error";
-  } else {
-    getOpeningHours()
-      .then((oh) => {
-        let data = {};
-        const openning_hours = oh.schedule;
-        const lastMonthDay = getLastDayOfMonth(date);
-        let tempDate = new Date(date);
-        let actualDay = getFirstDayIndex(date);
-        for (let a = 1; a <= lastMonthDay; a++) {
-          data[getDateYYYYMMDD(tempDate)] = {
-            end: openning_hours[actualDay * 2].toString(),
-            start: openning_hours[actualDay * 2 + 1].toString(),
-          };
-          if (actualDay == 6) actualDay = 0;
-          else actualDay++;
-          tempDate.setDate(tempDate.getDate() + 1);
+  try {
+    const yearMonth = getDateYYYYMM(date);
+    const openningHoursDoc = doc(firestore, "opening_hours_days", yearMonth);
+    return await runTransaction(firestore, async (transaction) => {
+      //month document does not exist
+      const openingHoursDoc = await transaction.get(openningHoursDoc);
+      if (!openingHoursDoc.exists()) {
+        const openingHoursSchedule = doc(
+          firestore,
+          "opening_hours_schedule",
+          "monday-sunday"
+        );
+        const openingHoursScheduleDoc = await transaction.get(
+          openingHoursSchedule
+        );
+        if (openingHoursScheduleDoc.exists()) {
+          const previousMonth = new Date();
+          previousMonth.setMonth(date.getMonth() - 1);
+          const previousYearMonth = getDateYYYYMM(previousMonth);
+          const previousMonthSchedule = doc(
+            firestore,
+            "opening_hours_days",
+            previousYearMonth
+          );
+          const previousOpeningHoursScheduleDoc = await transaction.get(
+            previousMonthSchedule
+          );
+          let data;
+          if (previousOpeningHoursScheduleDoc.exists()) {
+            const oh = openingHoursScheduleDoc.data();
+            data = previousOpeningHoursScheduleDoc.data();
+            delete data[getMonthName(previousMonth)];
+            delete data["Closed"][getMonthName(previousMonth)];
+            const newMonth = new Date();
+            newMonth.setMonth(date.getMonth() + 3);
+            const newDocRef = doc(firestore, "opening_hours_days", yearMonth);
+            const openning_hours = oh.schedule;
+            let tempDate = new Date(newMonth);
+            const lastMonthDay = getLastDayOfMonth(newMonth);
+            let actualDay = getFirstDayIndex(newMonth);
+            const monthName = getMonthName(newMonth);
+            data["Closed"][monthName] = [];
+            data[monthName] = {};
+            for (let a = 1; a <= lastMonthDay; a++) {
+              data[monthName][getDateYYYYMMDD(tempDate)] = {
+                start: openning_hours[actualDay * 2].toString(),
+                end: openning_hours[actualDay * 2 + 1].toString(),
+              };
+              if (actualDay == 6) actualDay = 0;
+              else actualDay++;
+              tempDate.setDate(tempDate.getDate() + 1);
+            }
+
+            transaction.set(newDocRef, data);
+          }
+          //previous schedule does not exist
+          else {
+            const oh = openingHoursScheduleDoc.data();
+            const newDocRef = doc(firestore, "opening_hours_days", yearMonth);
+            const openning_hours = oh.schedule;
+            data = {};
+            data["Closed"] = {};
+            for (let i = 0; i < 4; i++) {
+              let tempMonthDate = new Date(date);
+              tempMonthDate.setMonth(tempMonthDate.getMonth() + i);
+              const lastMonthDay = getLastDayOfMonth(tempMonthDate);
+              const monthName = getMonthName(tempMonthDate);
+
+              data[monthName] = {};
+              data["Closed"][monthName] = [];
+
+              let tempDate = new Date(tempMonthDate);
+              let actualDay = getFirstDayIndex(tempMonthDate);
+              for (let a = 1; a <= lastMonthDay; a++) {
+                data[monthName][getDateYYYYMMDD(tempDate)] = {
+                  start: openning_hours[actualDay * 2].toString(),
+                  end: openning_hours[actualDay * 2 + 1].toString(),
+                };
+                if (actualDay == 6) actualDay = 0;
+                else actualDay++;
+                tempDate.setDate(tempDate.getDate() + 1);
+              }
+            }
+
+            //////////////////////////////////////////////////
+            transaction.set(newDocRef, data);
+          }
+          return data;
+        } else {
+          Promise.reject("Sorry! Contact manager due to this error");
+          return "Schedule not found";
         }
-        setDoc(doc(firestore, "openning_hours", monthName), data)
-          .then(() => {
-            return "Success";
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      }
+      //month document exists not able to rewrite
+      else {
+        Promise.reject("Sorry! Month document already generated");
+        return "error";
+      }
+    });
+  } catch (e) {
+    console.error(e);
   }
 };
-export const getMonthOpeningHours = async (date) => {
-  const docRef = doc(firestore, "openning_hours", getMonthName(date));
+export const getThreeMonthsOpeningHours = async (date) => {
+  const docRef = doc(firestore, "opening_hours_days", getDateYYYYMM(date));
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return docSnap.data();
   } else {
-    return null;
+    return generateMonthOpeningHours(date);
   }
 };
 export const getReservations = async (date) => {
@@ -199,7 +267,7 @@ export const createReservation = async (
   time
 ) => {
   // Create an initial document to update.
-  const monthDocument = doc(
+  const monthDocumentPublic = doc(
     firestore,
     "reservations_public",
     getDateYYYYMM(date)
@@ -209,10 +277,12 @@ export const createReservation = async (
     const month = getDateYYYYMM(date);
     const day = getDateYYYYMMDD(date);
     return await runTransaction(firestore, async (transaction) => {
-      const monthDoc = await transaction.get(monthDocument);
+      //have to access public document user does not have permission to read reservation collection just to write to it.
+      const monthDoc = await transaction.get(monthDocumentPublic);
       //month document does not exist
       if (!monthDoc.exists()) {
-        const newDocRef = doc(firestore, "reservations_public", month);
+        const newDocRef = doc(firestore, "reservations", month);
+        const newPublicDocRef = doc(firestore, "reservations_public", month);
 
         transaction.set(newDocRef, {
           [day]: {
@@ -223,6 +293,11 @@ export const createReservation = async (
               phone: phone,
               time: time,
             },
+          },
+        });
+        transaction.set(newPublicDocRef, {
+          [day]: {
+            [table[0]]: time,
           },
         });
         //check fi there is multiple tables
@@ -251,6 +326,12 @@ export const createReservation = async (
         const dayData = monthDoc.data()[day];
         //day document does not exist
         if (!dayData) {
+          const monthDocument = doc(
+            firestore,
+            "reservations",
+            getDateYYYYMM(date)
+          );
+
           transaction.update(monthDocument, {
             [day]: {
               [table[0]]: {
@@ -260,6 +341,11 @@ export const createReservation = async (
                 phone: phone,
                 time: time,
               },
+            },
+          });
+          transaction.update(monthDocumentPublic, {
+            [day]: {
+              [table[0]]: time,
             },
           });
           //check fi there is multiple tables
@@ -277,6 +363,9 @@ export const createReservation = async (
                   time: time,
                 },
               });
+              transaction.update(monthDocumentPublic, {
+                [dayTable]: time,
+              });
             }
           }
 
@@ -286,6 +375,11 @@ export const createReservation = async (
         else {
           //table does not exist (it is not reserved)
           if (!checkTableExists(table, dayData)) {
+            const monthDocument = doc(
+              firestore,
+              "reservations",
+              getDateYYYYMM(date)
+            );
             table.forEach((singleTable) => {
               const dayTable = day + "." + singleTable;
               transaction.update(monthDocument, {
@@ -297,14 +391,16 @@ export const createReservation = async (
                   time: time,
                 },
               });
+              transaction.update(monthDocumentPublic, {
+                [dayTable]: time,
+              });
             });
             return "success";
           }
           //table exist (it is reserved)
           else {
-            return Promise.reject(
-              "Sorry! Somebody reserved the table before you"
-            );
+            Promise.reject("Sorry! Somebody reserved the table before you");
+            return "error";
           }
         }
       }
