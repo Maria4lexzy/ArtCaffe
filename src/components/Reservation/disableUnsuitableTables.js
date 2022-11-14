@@ -3,7 +3,7 @@ import { tables } from "../../constants";
 export const disableSmallTables = (numberOfPeople, reservedTables) => {
   let smallSizeTables = {};
   //get small table sizes
-  tables.tableSizes.map((table) => {
+  tables.tableSizes.forEach((table) => {
     if (table.people < numberOfPeople)
       smallSizeTables[table.name] = table.people;
   });
@@ -15,7 +15,7 @@ export const disableSmallTables = (numberOfPeople, reservedTables) => {
 export const getTableCombinations = (numberOfPeople, reservedTables) => {
   //get free tables
   const freeTables = {};
-  tables.tableSizes.map((table) => {
+  tables.tableSizes.forEach((table) => {
     //check if reserved if true table is free
     if (!reservedTables[table.name]) freeTables[table.name] = table.people;
   });
