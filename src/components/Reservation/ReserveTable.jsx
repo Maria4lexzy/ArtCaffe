@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
+import { setMinutes, setHours } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   disableSmallTables,
@@ -20,7 +21,11 @@ import {
 import { tables } from "../../constants";
 import Layout from "../TableLayout/Layout";
 import { getMonthName } from "../../utils/calendar";
-import { getDateYYYYMMDD } from "../../utils/dateParser";
+import {
+  getDateYYYYMMDD,
+  getDateYYYYMMDDHHMMSS,
+  getDateHHMMSS,
+} from "../../utils/dateParser";
 const ReserveTable = () => {
   const { selected, disabled } = useSelector((state) => state.reservations);
   const dispatch = useDispatch();
@@ -28,18 +33,15 @@ const ReserveTable = () => {
   const lName = useRef();
   const email = useRef();
   const phone = useRef();
-  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(null);
   const [numberOfPeople, setNumberOfPeople] = useState(0);
   const [date, setDate] = useState(new Date());
   const [reservationStep, setReservationStep] = useState(0);
   const [openningHours, setOpenningHours] = useState({});
   const [closedDays, setClosedDays] = useState([]);
-  const handleSelectTimeChange = (e) => {
-    setSelectedTime(e.target.value);
-  };
   const reserveTable = () => {
     createReservation(
-      new Date(date.current.value),
+      date,
       fName.current.value + " " + lName.current.value,
       phone.current.value,
       email.current.value,
@@ -146,8 +148,24 @@ const ReserveTable = () => {
         break;
       }
       case 2: {
-        setReservationStep(3);
+        if (selected.length > 0) setReservationStep(3);
+        else {
+          //display WARNING table not selected
+        }
         break;
+      }
+      case 3: {
+        if (
+          fName.current.value &&
+          lName.current.value &&
+          phone.current.value &&
+          email.current.value
+        )
+          setReservationStep(4);
+        else {
+          console.log("empty");
+          //display WARNING table not selected
+        }
       }
 
       default:
@@ -239,11 +257,38 @@ const ReserveTable = () => {
               onChange={(date) => setSelectedTime(date)}
               showTimeSelect
               showTimeSelectOnly
+              minTime={getMinMaxForTimePicker(true)}
+              maxTime={getMinMaxForTimePicker(false)}
               timeIntervals={15}
               timeCaption="Time"
+              dateFormat="HH:mm"
               timeFormat="HH:mm"
             />
-
+          </>
+        );
+      }
+      case 4: {
+        return (
+          <>
+            <p>
+              Reservation on {getDateYYYYMMDDHHMMSS(date)} at{" "}
+              {getDateHHMMSS(selectedTime)}
+            </p>
+            <p> Name: {fName.current.value + " " + lName.current.value}</p>
+            <p> For {numberOfPeople} people</p>
+            <div>
+              {" "}
+              Table:
+              {selected.map((t) => {
+                return <p key={t}>{t},</p>;
+              })}{" "}
+            </div>
+            <p>
+              Phone(will be used to confim reservation): {phone.current.value}
+            </p>
+            <p>
+              Email(you will receive e-mail confirmation): {email.current.value}
+            </p>
             <button type="button" onClick={() => reserveTable()}>
               Confirm reservations
             </button>
@@ -272,19 +317,20 @@ const ReserveTable = () => {
     }
   };
   const getMinMaxForTimePicker = (minMax) => {
+    let timeString;
     if (minMax) {
-      console.log(
-        openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["start"]
-      );
-      return (
-        openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["start"] +
-        ":00"
-      );
+      timeString =
+        openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["start"];
     } else {
-      return (
-        openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["end"] + ":00"
-      );
+      timeString =
+        openningHours[getMonthName(date)][getDateYYYYMMDD(date)]["end"];
     }
+    console.log(timeString.substring(0, 2));
+    console.log(timeString.substring(3, 5));
+    return setHours(
+      setMinutes(new Date(), timeString.substring(3, 5)),
+      timeString.substring(0, 2) - 1
+    );
   };
   const getExcludeDays = (results) => {
     let days = [];
@@ -311,7 +357,7 @@ const ReserveTable = () => {
       <button
         type="button"
         onClick={() => handleNextBtn()}
-        disabled={reservationStep === 3}
+        disabled={reservationStep === 4}
       >
         Next
       </button>
