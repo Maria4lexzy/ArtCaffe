@@ -1,0 +1,68 @@
+.app__reservationsheet {
+  padding: 48px;
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-black);
+  width: 50%;
+  height: fit-content;
+  &-heading {
+    text-align: center;
+    align-self: center;
+  }
+  &-input {
+    display: flex;
+    flex-flow: column wrap;
+    margin-top: 32px;
+    div {
+      display: flex;
+      justify-content: center;
+    }
+
+    input,
+    select {
+      width: 220px;
+      border: 1px solid var(--color-primary);
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: var(--font-base);
+      color: var(--color-white);
+      //   margin-right: 24px;
+      margin-bottom: 16px;
+      padding: 8px 16px;
+      background: var(--color-black);
+    }
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      background: url("../../assets/clock.svg");
+      background-repeat: no-repeat;
+      margin-top: 5%;
+    }
+    label {
+      width: 248px;
+      padding: 4px;
+    }
+    button {
+      width: max-content;
+    }
+  }
+}
+.react-modal-sheet-backdrop {
+  background-color: rgb(71, 44, 104);
+  /* custom styles */
+}
+.react-modal-sheet-container {
+  background-color: var(--color-black);
+}
+
+.react-modal-sheet-drag-indicator {
+  /* custom styles */
+}
+.react-modal-sheet-content {
+  display: flex;
+  background-color: var(--color-black);
+  padding: 24px 72px;
+  justify-content: center;
+}
+
+.react-modal-sheet-header {
+  background-color: var(--color-black);
+  //   add box shadow?
+}

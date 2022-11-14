@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Calendar.scss";
+import "./ReservationSheet.scss";
 import CalendarMonthView from "./CalendarMonthView";
+import { createReservation } from "../../firebase";
+import Sheet from "react-modal-sheet";
 import {
   currentDateAction,
   fistDateInWeekAction,
@@ -18,16 +21,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { getFirstDateFromWeekNo } from "../../utils/calendar";
 import { getReservations } from "../../firebase";
 import { getDateYYYYMMDD, getDayName } from "../../utils/dateParser";
+import SubHeading from "../SubHeading/SubHeading";
 
+const populateSelect = () => {
+  let list = [];
+
+  for (let i = 0; i <= 12; i++) {
+    list.push(i);
+  }
+  console.log(list);
+  return list;
+};
 export default function Calendar() {
   const { loading, date, calendarTitle, monthData } = useSelector(
     (state) => state.calendar
   );
 
   const [open, setOpen] = useState(false);
-
+  const [isModalOpen, setOpenModal] = useState(false);
   const [dateSelected, setDateSelected] = useState("");
   const dispatch = useDispatch();
+  const nr_guest_ref = useRef(0);
+  const tables_ref = useRef("");
+  const name_ref = useRef("");
+  const email_ref = useRef("");
+  const phone_ref = useRef("");
+  const time_ref = useRef("");
 
   useEffect(() => {
     let today = new Date();
@@ -101,9 +120,45 @@ export default function Calendar() {
   const deleteReservation = () => {
     console.log("delete function called");
   };
-  const createReservation = () => {
-    console.log("create reservation function called");
-  };
+
+  async function submitReservation(e) {
+    e.preventDefault();
+    let tables = [];
+    if (tables_ref.current.value.length > 2) {
+      tables = tables_ref.current.value.split(",");
+    } else tables = tables_ref.current.value;
+    try {
+      createReservation(
+        new Date(date),
+        name_ref.current.value,
+        phone_ref.current.value,
+        email_ref.current.value,
+        nr_guest_ref.current.value,
+        tables,
+        time_ref.current.value
+      )
+        .then((result) => {
+          console.log(result);
+          if (result.code === "auth/wrong-password") {
+            //setError(language.wrong_password);
+            //setLoading(false);
+          } else if (result.code === "auth/too-many-requests") {
+            //setError(language.too_many_requests);
+            //setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          // setError(language.wrong_password);
+          //setLoading(false);
+          console.log(error);
+        });
+    } catch (e) {
+      //setError(language.wrong_password);
+      //setLoading(false);
+      console.log(e);
+    }
+  }
+  async function handleSubmitReservation() {}
 
   return (
     <>
@@ -148,12 +203,12 @@ export default function Calendar() {
               </p>
             </div>
             <div className="create-new">
-              <button type="button" class="custom__button--dark">
-                Add event{" "}
-                <BsPlus
-                  className="icon"
-                  onClick={() => createReservation("left")}
-                />
+              <button
+                type="button"
+                className="custom__button--dark"
+                onClick={() => setOpenModal(true)}
+              >
+                New Reservation <BsPlus className="icon" />
               </button>
             </div>
           </div>
@@ -163,10 +218,15 @@ export default function Calendar() {
                 {
                   // monthData && dateSelected && (Object.values(monthData).indexOf(dateSelected) > -1)
 
-                  Object.entries(monthData[dateSelected]).map((data) => {
+                  Object.entries(monthData[dateSelected]).map((data, index) => {
                     return (
-                      <div className="event">
-                        <p className="p__cormorant time">{data[1].time}</p>
+                      <div className="event" key={index}>
+                        <datetime
+                          datetime="20:00"
+                          className="p__cormorant time"
+                        >
+                          {data[1].time}
+                        </datetime>
                         <div className=" data ">
                           <p className="p__opensans name">{data[1].name} </p>
                           <p className="p__opensans">
@@ -190,6 +250,116 @@ export default function Calendar() {
             )}
           </div>
         </div>
+      </div>
+      <div className="app__reservationsheet">
+        <Sheet
+          isOpen={isModalOpen}
+          onClose={() => setOpenModal(false)}
+          // detent="content-height"
+        >
+          <Sheet.Container>
+            <Sheet.Header />
+            <Sheet.Content>
+              <div className="app__reservationsheet">
+                <div className="app__modalsheet-heading">
+                  <SubHeading title="Create ss Reservation Reservation" />
+                </div>
+                <div className="app__reservationsheet-input ">
+                  <div>
+                    <label className="p__opensans" htmlForm="guests">
+                      Guests
+                    </label>
+                    <select
+                      required
+                      ref={nr_guest_ref}
+                      name="guests"
+                      id="guest"
+                    >
+                      {populateSelect().map((e, k) => {
+                        return (
+                          <option key={k} value={e}>
+                            {e}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="p__opensans" htmlForm="table">
+                      Table(s)
+                    </label>
+                    <input
+                      ref={tables_ref}
+                      type="text"
+                      name="table"
+                      placeholder="T4, T1"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="p__opensans" htmlForm="name">
+                      Name
+                    </label>
+                    <input
+                      ref={name_ref}
+                      type="text"
+                      name="name"
+                      placeholder="Jakub"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="p__opensans" htmlForm="email">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      ref={email_ref}
+                      placeholder="example@gmail.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="p__opensans" htmlForm="number">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      ref={phone_ref}
+                      placeholder="+427 55 89 46"
+                    />
+                  </div>
+                  <div>
+                    <label className="p__opensans" htmlForm="time">
+                      Time
+                    </label>
+                    <input
+                      type="time"
+                      name="time"
+                      id="appt"
+                      min="18:00"
+                      max="23:00"
+                      ref={time_ref}
+                      required
+                    />
+                  </div>
+
+                  <button
+                    onClick={submitReservation}
+                    type="submit"
+                    className="custom__button"
+                  >
+                    Reserve
+                  </button>
+                </div>
+              </div>
+            </Sheet.Content>
+          </Sheet.Container>
+
+          <Sheet.Backdrop />
+        </Sheet>
       </div>
     </>
   );
