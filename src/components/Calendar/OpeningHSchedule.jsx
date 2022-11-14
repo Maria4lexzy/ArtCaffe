@@ -3,7 +3,7 @@ import "./OpeningHSchedule.scss";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { Table } from "react-bootstrap";
-import TimePicker from "react-bootstrap-time-picker";
+// import TimePicker from "react-bootstrap-time-picker";
 import { getOpeningHours, updateOpeningHours } from "../../firebase";
 import { Button } from "react-bootstrap";
 export default function OpeningHSchedule() {
@@ -166,7 +166,7 @@ export default function OpeningHSchedule() {
                 <option value="Sunday">Sunday</option>
               </Form.Select>
             </div>
-            <div className="col-md-3 col-sm-12  mb-2">
+            {/* <div className="col-md-3 col-sm-12  mb-2">
               <TimePicker
                 step={15}
                 format={24}
@@ -183,7 +183,7 @@ export default function OpeningHSchedule() {
                 onChange={(e) => handleEndTimeChange(e)}
                 value={endH}
               />
-            </div>
+            </div> */}
             <div className="col-md-3 col-sm-12 mb-2">
               <Button
                 onClick={() => changeOpeningH()}
