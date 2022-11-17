@@ -7,7 +7,16 @@ import {
   getLastDayOfMonth,
   getMonthName,
 } from "./utils/calendar";
+import {
+  getFunctions,
+  httpsCallable,
+  connectFunctionsEmulator,
+} from "firebase/functions";
 import { getDateYYYYMMDD, getDateYYYYMM } from "./utils/dateParser";
+const {
+  initializeAppCheck,
+  ReCaptchaV3Provider,
+} = require("firebase/app-check");
 
 /**FIREBASE CONFIGURATION AND INSTANCES */
 const firebaseConfig = {
@@ -19,11 +28,28 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+////////////////REMOVE FOR PUSH
+/* eslint-disable-next-line no-restricted-globals */
+self.FIREBASE_APPCHECK_DEBUG_TOKEN =
+  process.env.REACT_APP_FIREBASE_RECAPTCHA_DEBUG;
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider(process.env.REACT_APP_FIREBASE_RECAPTCHA),
+  // Optional argument. If true, the SDK automatically refreshes App Check
+  // tokens as needed.
+  isTokenAutoRefreshEnabled: true,
+});
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-const provider = new firebase.auth.GoogleAuthProvider();
-const providerFacebook = new firebase.auth.FacebookAuthProvider();
+const functions = getFunctions(app);
+// eslint-disable-next-line no-restricted-globals
+if (location.hostname === "localhost") {
+  firestore.useEmulator("localhost", 8080);
+  auth.useEmulator("http://localhost:9099/", { disableWarnings: true });
+  connectFunctionsEmulator(functions, "localhost", 5001);
+}
+
+export const sendEmail = httpsCallable(functions, "sendEmail");
 
 /**************************************************************************************
  **************************************************************************************
@@ -31,25 +57,9 @@ const providerFacebook = new firebase.auth.FacebookAuthProvider();
  **************************************************************************************
  *************************************************************************************/
 
-export const connectTicketWithEmail = async (email, password) => {
-  return await auth.createUserWithEmailAndPassword(email, password);
-};
-export const connectTicketWithEmailGoogle = async () => {
-  return await auth.signInWithPopup(provider);
-};
-export const connectTicketWithEmailFacebook = async () => {
-  return await auth.signInWithPopup(providerFacebook);
-};
-
-export const signInWithGoogle = async () => {
-  auth.signInWithPopup(provider);
-};
 export const fetchSignInMethodsForEmail = async (email) => {
   //auth.signInWithPopup(provider);
   return auth.fetchSignInMethodsForEmail(email);
-};
-export const signInWithFacebook = async () => {
-  return await auth.signInWithPopup(providerFacebook);
 };
 
 export const signOutUser = () => {
@@ -61,10 +71,6 @@ export const signOutUser = () => {
     .catch((error) => {
       // An error happened.
     });
-};
-
-export const sendUserVerificationEmail = async () => {
-  return await auth.currentUser.sendEmailVerification();
 };
 
 export const signInWithEmailAndPassword = async (email, password) => {
@@ -83,26 +89,6 @@ export const signInWithEmailAndPassword = async (email, password) => {
  **************************************************************************************
  *************************************************************************************/
 
-export const sendResetEmail = (email) => {
-  return auth.sendPasswordResetEmail(email);
-};
-
-export const updateUserPassword = (currentPassword, newPassword) => {
-  var user = auth.currentUser;
-  const emailCred = firebase.auth.EmailAuthProvider.credential(
-    user.email,
-    currentPassword
-  );
-  user
-    .reauthenticateWithCredential(emailCred)
-    .then(() => {
-      // User successfully reauthenticated.
-      return user.updatePassword(newPassword);
-    })
-    .catch((error) => {
-      return error.message;
-    });
-};
 //////////////////////ARTCAFFE///////////////////////////////
 export const getOpeningHours = async () => {
   const docRef = doc(firestore, "opening_hours_schedule", "monday-sunday");

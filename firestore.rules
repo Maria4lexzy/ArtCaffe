@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  function isSignedIn() 
+  {
+      return request.auth != null;
+  } 
+   match /reservations/{anyDocument} 
+   {  
+     allow create, update;
+   }
+   match /opening_hours_days/{id} 
+   {  
+     allow create;
+   }
+    match /opening_hours_days/{anyDocument} 
+   {  
+     allow read;
+   }
+    match /opening_hours_schedule/{anyDocument} 
+   {  
+     allow read;
+   }
+   match /reservations_public/{anyDocument} 
+   {  
+     allow read,create,update;
+   }
+    match /{document=**} {
+      allow read, write: if isSignedIn();
+    }
+    
+  }
+  
+}
