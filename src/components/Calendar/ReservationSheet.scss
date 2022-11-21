@@ -17,9 +17,29 @@
       justify-content: center;
     }
 
+    // .css-b62m3t-container {
+    // }
+    // .css-319lph-ValueContainer {
+    // }
+    // .css-1hb7zxy-IndicatorsContainer {
+    // }
+    // .css-3jzecq-control:hover {
+    //   width: 80%;
+    //   border: 1px solid var(--color-primary);
+    //   border-radius: 4px;
+    //   font-size: 16px;
+    //   font-family: var(--font-base);
+    //   color: var(--color-white);
+    //   //   margin-right: 24px;
+    //   margin-bottom: 16px;
+    //   padding: 8px 16px;
+    //   background: var(--color-black);
+    // }
+    // .css-1s2u09g-control,
+    // .css-3jzecq-control ,
     input,
     select {
-      width: 220px;
+      width: 80%;
       border: 1px solid var(--color-primary);
       border-radius: 4px;
       font-size: 16px;
@@ -33,7 +53,7 @@
     input[type="time"]::-webkit-calendar-picker-indicator {
       background: url("../../assets/clock.svg");
       background-repeat: no-repeat;
-      margin-top: 5%;
+      margin-top: 2%;
     }
     label {
       width: 248px;
@@ -66,3 +86,99 @@
   background-color: var(--color-black);
   //   add box shadow?
 }
+
+.react-select {
+  &-container {
+    width: 80%;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: var(--font-base);
+    color: var(--color-white);
+    //   margin-right: 24px;
+    margin-bottom: 16px;
+    // padding: 8px 16px;
+    background: var(--color-black);
+    &__multi-value {
+      background-color: green;
+    }
+  }
+  &__control {
+    border-radius: 0;
+    border: none;
+    width: 100%;
+    background-color: yellow;
+  }
+  &__option {
+    background-color: rgba(200, 10, 10, 0.74);
+
+    &--is-focused {
+      background-color: violet;
+    }
+    &:focus {
+      background-color: violet;
+    }
+  }
+  &__menu {
+    background-color: rgba(54, 50, 50, 0.74);
+    &-list {
+      background: var(--color-black);
+    }
+  }
+  &__indicator {
+    color: rgb(42, 13, 13);
+    &-separator {
+      color: green;
+    }
+  }
+}
+
+// .react-select {
+//   &-container {
+//     width: 80%;
+//     border: 1px solid var(--color-primary);
+//     border-radius: 4px;
+//     font-size: 16px;
+//     font-family: var(--font-base);
+//     color: var(--color-white);
+//     //   margin-right: 24px;
+//     margin-bottom: 16px;
+//     padding: 8px 16px;
+//     background: var(--color-black);
+//   }
+//   &__menu {
+//     &-list {
+//     }
+//   }
+//   &__control {
+//     padding: 4px;
+//     background-color: yellow;
+//     border: 4px solid green;
+//   }
+//   &__value-container {
+//     box-sizing: border-box;
+//     background-color: green;
+//   }
+
+//   &__option {
+//     background-color: rgb(169, 36, 36);
+
+//     &--is-focused {
+//       background-color: lightblue;
+//     }
+//   }
+
+//   &__group {
+//     padding: 0;
+//   }
+
+//   &__menu-portal {
+//     border: 1px solid darkblue;
+//   }
+//   &__indicator {
+//     color: red;
+//     &-separator {
+//       color: green;
+//     }
+//   }
+// }

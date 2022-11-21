@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import "./Calendar.scss";
 import "./ReservationSheet.scss";
 import CalendarMonthView from "./CalendarMonthView";
 import { createReservation } from "../../firebase";
 import Sheet from "react-modal-sheet";
+import Select from "react-select";
+import { tables } from "../../constants";
+
 import {
   currentDateAction,
   fistDateInWeekAction,
@@ -25,41 +28,45 @@ import { getReservations } from "../../firebase";
 import { getDateYYYYMMDD, getDayName } from "../../utils/dateParser";
 import SubHeading from "../SubHeading/SubHeading";
 
-const populateSelect = () => {
-  let list = [];
-
+// For generating number 1-12 to populate the Guests Select list
+const populateGuestsSelect = () => {
+  let nr_guest = [];
   for (let i = 1; i <= 12; i++) {
-    list.push(i);
+    nr_guest.push(i);
   }
-
-  return list;
+  return nr_guest;
 };
 export default function Calendar() {
   const { date, calendarTitle, monthData } = useSelector(
     (state) => state.calendar
   );
 
-  const [open, setOpen] = useState(false);
   const [isModalOpen, setOpenModal] = useState(false);
   const [dateSelected, setDateSelected] = useState("");
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
       guests: "1",
-      table: "T1, T4",
-      name: "Alex",
-      emai: "alex@gmail.com",
+      table: "",
+      name: "",
+      email: "",
+      phone: "",
+      time: "",
     },
   });
-  const nr_guest_ref = useRef(0);
-  const tables_ref = useRef("");
-  const name_ref = useRef("");
-  const email_ref = useRef("");
-  const time_ref = useRef("");
+  const tableOptions = tables.tableSelect;
+
+  // const nr_guest_ref = useRef(0);
+  // const tables_ref = useRef("");
+  // const name_ref = useRef("");
+  // const email_ref = useRef("");
+  // const time_ref = useRef("");
+  // const phone_ref = useRef("");
 
   useEffect(() => {
     let today = new Date();
@@ -106,9 +113,6 @@ export default function Calendar() {
     dispatch(fistDateInWeekAction({ newWeekDate: firstDayInweek.toString() }));
     dispatch(dayDisplayedAction({ newDayDisplayed: new Date().toString() }));
   };
-  const toogleLoading = () => {
-    setOpen(!open);
-  };
 
   const monthViewChange = (type) => {
     //true next button was pressed
@@ -133,48 +137,46 @@ export default function Calendar() {
     console.log("delete function called");
   };
 
-  async function submitReservation(data) {
+  const submitReservation = async (data) => {
     // e.preventDefault();
-    let tables = [];
-    if (data.table.length > 2) {
-      tables = tables_ref.current.value.split(",");
-    } else tables = tables_ref.current.value;
-    try {
-      createReservation(
-        new Date(date),
-        // name_ref.current.value,
-        // phone_ref.current.value,
-        // email_ref.current.value,
-        // nr_guest_ref.current.value,
-        data.name,
-        data.phone,
-        data.email,
-        data.guests,
-        tables,
-        data.time
-      )
-        .then((result) => {
-          if (result === "success") {
-            toast.success("Reservation created");
-          } else if (result === "error") {
-            toast.error("problemoo");
-          }
-        })
-        .catch(function (error) {
-          // setError(language.wrong_password);
-          //setLoading(false);
-          console.log(error);
-        });
-    } catch (e) {
-      //setError(language.wrong_password);
-      //setLoading(false);
-      console.log(e);
-    }
-  }
-
+    let tablesWithoutSpaces = [];
+    if (data.table > 2) {
+      tablesWithoutSpaces = data.table.split(",");
+    } else tablesWithoutSpaces.push(data.table);
+    console.log(
+      new Date(dateSelected),
+      data.name,
+      data.phone,
+      data.email,
+      data.guests,
+      tablesWithoutSpaces[0],
+      data.time
+    );
+  };
+  const onSubmit = (data) => {
+    console.log("dkdjfldkj");
+    submitReservation(data);
+  };
+  const colourStyles = {
+    menuList: (styles) => ({
+      ...styles,
+      // background: "violet",
+    }),
+    option: (styles, { isFocused, isSelected }) => ({
+      ...styles,
+      background: isFocused ? "#f15b25" : isSelected ? "#f15b25" : undefined,
+      zIndex: 1,
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 100,
+    }),
+  };
   return (
     <>
       {/* Calendar Tools */}
+      <Toaster />
+
       <div className="app__calendar">
         <div className="app__calendar--cal">
           <div className="app__calendar--cal_tools">
@@ -196,10 +198,7 @@ export default function Calendar() {
           </div>
 
           <div className="app__calendar--cal_month">
-            <CalendarMonthView
-              toogleLoading={toogleLoading}
-              dateClicked={dateClicked}
-            />
+            <CalendarMonthView dateClicked={dateClicked} />
           </div>
         </div>
 
@@ -233,12 +232,7 @@ export default function Calendar() {
                   Object.entries(monthData[dateSelected]).map((data, index) => {
                     return (
                       <div className="event" key={index}>
-                        <datetime
-                          dateTime="20:00"
-                          className="p__cormorant time"
-                        >
-                          {data[1].time}
-                        </datetime>
+                        <p className="p__cormorant time">{data[1].time}</p>
                         <div className=" data ">
                           <p className="p__opensans name">{data[1].name} </p>
                           <p className="p__opensans">
@@ -279,20 +273,20 @@ export default function Calendar() {
                 </div>
                 <form
                   className="app__reservationsheet-input "
-                  onSubmit={handleSubmit((data) => submitReservation(data))}
+                  onSubmit={handleSubmit((data) => onSubmit(data))}
                 >
                   <div>
                     <label className="p__opensans" htmlFor="guests">
                       Guests
                     </label>
                     <select
-                      required
-                      ref={nr_guest_ref}
                       {...register("guests")}
+                      required
+                      // ref={nr_guest_ref}
                       name="guests"
                       id="guest"
                     >
-                      {populateSelect().map((e, k) => {
+                      {populateGuestsSelect().map((e, k) => {
                         return (
                           <option key={k} value={e}>
                             {e}
@@ -305,13 +299,51 @@ export default function Calendar() {
                     <label className="p__opensans" htmlFor="table">
                       Table(s)
                     </label>
-                    <input
-                      {...register("table", { required: true })}
+                    {/* <Select
+                      {...register("table")}
+                      options={tableOptions}
                       type="text"
                       name="table"
-                      ref={tables_ref}
-                      placeholder="T4, T1"
+                      // ref={tables_ref}
+                      // placeholder="T4, T1"
                       required
+                    /> */}
+                    <Controller
+                      control={control}
+                      defaultValue={tableOptions.map((c) => c.value)}
+                      name="table"
+                      render={({ field: { onChange, value, ref } }) => (
+                        <Select
+                          classNamePrefix="react-select"
+                          className="react-select-container"
+                          inputRef={ref}
+                          value={tableOptions.filter((c) =>
+                            value.includes(c.value)
+                          )}
+                          onChange={(val) => onChange(val.map((c) => c.value))}
+                          options={tableOptions}
+                          isMulti
+                          // styles={{
+                          //   control: (baseStyles, state) => ({
+                          //     ...baseStyles,
+                          //     borderColor: state.isFocused ? "grey" : "red",
+                          //   }),
+                          // }}
+                          // theme={(theme) => ({
+                          //   ...theme,
+
+                          //   font: "Oregano",
+                          //   borderRadius: "4px",
+
+                          //   colors: {
+                          //     ...theme.colors,
+                          //     primary25: "#f15b25",
+                          //     primary: "#f15b25",
+                          //   },
+                          // })}
+                          styles={colourStyles}
+                        />
+                      )}
                     />
                   </div>
                   <div>
@@ -319,10 +351,10 @@ export default function Calendar() {
                       Name
                     </label>
                     <input
-                      {...register("name", { required: true })}
+                      {...register("name")}
                       type="text"
                       name="name"
-                      ref={name_ref}
+                      // ref={name_ref}
                       placeholder="Jakub"
                       required
                     />
@@ -332,11 +364,11 @@ export default function Calendar() {
                       Email
                     </label>
                     <input
+                      {...register("email")}
                       type="email"
                       name="email"
-                      ref={email_ref}
-                      {...register("email")}
-                      placeholder="example@gmail.com"
+                      // ref={email_ref}
+                      // placeholder="example@gmail.com"
                     />
                   </div>
                   <div>
@@ -344,10 +376,11 @@ export default function Calendar() {
                       Phone Number
                     </label>
                     <input
+                      {...register("phone")}
                       type="tel"
                       name="phone"
-                      {...register("phone")}
-                      placeholder="+427 55 89 46"
+                      // ref={phone_ref}
+                      // placeholder="+427 55 89 46"
                     />
                   </div>
                   <div>
@@ -355,14 +388,16 @@ export default function Calendar() {
                       Time
                     </label>
                     <input
-                      ref={time_ref}
+                      {...register("time")}
+                      // ref={time_ref}
                       type="time"
                       name="time"
                       id="appt"
                       min="18:00"
                       max="23:00"
                       // ref={time_ref}
-                      {...register("time", { required: true })}
+
+                      required
                     />
                   </div>
                   {errors.exampleRequired && (

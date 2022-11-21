@@ -321,5 +321,29 @@ const tableSizes = [
   { name: "F5", people: 4 },
   { name: "F6", people: 4 },
 ];
+
+const tableSelect = [
+  { value: "T1", label: "T1" },
+  { value: "T2", label: "T2" },
+  { value: "T3", label: "T3" },
+  { value: "T4", label: "T4" },
+  { value: "T5", label: "T5" },
+  { value: "T6", label: "T6" },
+  { value: "T7", label: "T7" },
+  { value: "Sofa", label: "Sofa" },
+  { value: "K1", label: "K1" },
+  { value: "K2", label: "K2" },
+  { value: "K3", label: "K3" },
+  { value: "K4", label: "K4" },
+  { value: "K5", label: "K5" },
+  { value: "K6", label: "K6" },
+  { value: "K7", label: "K7" },
+  { value: "F1", label: "F1" },
+  { value: "F2", label: "F2" },
+  { value: "F3", label: "F3" },
+  { value: "F4", label: "F4" },
+  { value: "F5", label: "F5" },
+  { value: "F6", label: "F6" },
+];
 // eslint-disable-next-line
-export default { coffeeRoom, smokingRoom, terace, tableSizes };
+export default { tableSelect, coffeeRoom, smokingRoom, terace, tableSizes };
