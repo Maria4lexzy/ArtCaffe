@@ -150,3 +150,4 @@ yarn-debug.log*
 yarn-error.log*
 .firebase/hosting.YnVpbGQ.cache
 .firebase/hosting.cHVibGlj.cache
+functions/package-lock.json
