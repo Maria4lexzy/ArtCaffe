@@ -61,10 +61,12 @@
 .custom__hr {
   border: 0;
   height: 2px;
-  background-image: linear-gradient(to right,
-      rgba(252, 252, 252, 0.65),
-      rgba(252, 252, 252, 0.25),
-      rgba(252, 252, 252, 0));
+  background-image: linear-gradient(
+    to right,
+    rgba(252, 252, 252, 0.65),
+    rgba(252, 252, 252, 0.25),
+    rgba(252, 252, 252, 0)
+  );
   margin: 8px 0;
 }
 
@@ -128,7 +130,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: capitalize;
-  font-feature-settings: "tnum"on, "lnum"on;
+  font-feature-settings: "tnum" on, "lnum" on;
   line-height: 29.9px;
   font-size: 23px;
 }
@@ -156,8 +158,28 @@
   width: 120px;
 }
 
-@media screen and (min-width: 2000px) {
+::-webkit-scrollbar {
+  width: 8px;
+  transition: 0.5s ease;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  transition: 0.5s ease;
+  background: rgba(241, 91, 37, 0.39);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+@media screen and (min-width: 2000px) {
   .custom__button,
   .custom__button--dark .p__cormorant {
     font-size: 32px;
@@ -218,7 +240,6 @@
 }
 
 @media screen and (max-width: 450px) {
-
   .custom__button,
   .custom__button--dark,
   .p__cormorant,
